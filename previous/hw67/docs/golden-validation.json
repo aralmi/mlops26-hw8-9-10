@@ -1,0 +1,455 @@
+{
+  "pandas": "2.3.3",
+  "checked": [
+    {
+      "id": "pandas-001",
+      "setup": "s=pd.Series([13,27,41],index=['p','q','r'])",
+      "expression": "int(s.iloc[1])",
+      "expected_value": "27",
+      "actual_value": "27",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-002",
+      "setup": "s=pd.Series([8,6,4],index=[20,10,30])",
+      "expression": "int(s.loc[10])",
+      "expected_value": "6",
+      "actual_value": "6",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-003",
+      "setup": "s=pd.Series([2,5,9,12],index=['a','b','c','d'])",
+      "expression": "s.loc['b':'c'].tolist()",
+      "expected_value": "[5, 9]",
+      "actual_value": "[5, 9]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-004",
+      "setup": "s=pd.Series([3,7,11,15])",
+      "expression": "s.iloc[1:3].tolist()",
+      "expected_value": "[7, 11]",
+      "actual_value": "[7, 11]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-005",
+      "setup": "df=pd.DataFrame({'u':[2,8,5],'v':[9,3,6]})",
+      "expression": "df.loc[df['u']>4,'v'].tolist()",
+      "expected_value": "[3, 6]",
+      "actual_value": "[3, 6]",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-006",
+      "setup": "df=pd.DataFrame({'a':[1,2],'b':[3,4]},index=['x','y'])",
+      "expression": "int(df.at['y','b'])",
+      "expected_value": "4",
+      "actual_value": "4",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-007",
+      "setup": "df=pd.DataFrame({'a':[4,7],'b':[6,9]})",
+      "expression": "int(df.iat[0,1])",
+      "expected_value": "6",
+      "actual_value": "6",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-008",
+      "setup": "s=pd.Series([10,20,30],index=['z','x','y'])",
+      "expression": "s.sort_index().tolist()",
+      "expected_value": "[20, 30, 10]",
+      "actual_value": "[20, 30, 10]",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-009",
+      "setup": "df=pd.DataFrame({'v':[8,2,6]},index=['a','b','c'])",
+      "expression": "df.drop(index='b')['v'].tolist()",
+      "expected_value": "[8, 6]",
+      "actual_value": "[8, 6]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-010",
+      "setup": "s=pd.Series([1,2,3],index=['aa','bb','cc'])",
+      "expression": "s.reindex(['cc','aa']).tolist()",
+      "expected_value": "[3, 1]",
+      "actual_value": "[3, 1]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/indexing.html"
+    },
+    {
+      "id": "pandas-011",
+      "setup": "s=pd.Series([1,np.nan,3,np.nan])",
+      "expression": "int(s.isna().sum())",
+      "expected_value": "2",
+      "actual_value": "2",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-012",
+      "setup": "s=pd.Series([np.nan,4,np.nan,8])",
+      "expression": "s.fillna(0).tolist()",
+      "expected_value": "[0.0, 4.0, 0.0, 8.0]",
+      "actual_value": "[0.0, 4.0, 0.0, 8.0]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-013",
+      "setup": "df=pd.DataFrame({'a':[1,np.nan,3],'b':[np.nan,2,4]})",
+      "expression": "df.dropna().index.tolist()",
+      "expected_value": "[2]",
+      "actual_value": "[2]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-014",
+      "setup": "df=pd.DataFrame({'a':[1,np.nan,3],'b':[np.nan,2,4]})",
+      "expression": "df.dropna(subset=['a']).index.tolist()",
+      "expected_value": "[0, 2]",
+      "actual_value": "[0, 2]",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-015",
+      "setup": "s=pd.Series([2,np.nan,8])",
+      "expression": "float(s.mean())",
+      "expected_value": "5.0",
+      "actual_value": "5.0",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-016",
+      "setup": "s=pd.Series([np.nan,np.nan])",
+      "expression": "float(s.sum())",
+      "expected_value": "0.0",
+      "actual_value": "0.0",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-017",
+      "setup": "s=pd.Series([1,None,3],dtype='Int64')",
+      "expression": "int(s.count())",
+      "expected_value": "2",
+      "actual_value": "2",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-018",
+      "setup": "s=pd.Series([5,np.nan,np.nan,9])",
+      "expression": "s.ffill().tolist()",
+      "expected_value": "[5.0, 5.0, 5.0, 9.0]",
+      "actual_value": "[5.0, 5.0, 5.0, 9.0]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-019",
+      "setup": "s=pd.Series([0,np.nan,4])",
+      "expression": "s.notna().tolist()",
+      "expected_value": "[True, False, True]",
+      "actual_value": "[True, False, True]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-020",
+      "setup": "df=pd.DataFrame({'a':[1,np.nan],'b':[np.nan,np.nan]})",
+      "expression": "df.dropna(axis=1,how='all').columns.tolist()",
+      "expected_value": "['a']",
+      "actual_value": "['a']",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/missing_data.html"
+    },
+    {
+      "id": "pandas-021",
+      "setup": "df=pd.DataFrame({'g':['a','b','a'],'v':[3,5,7]})",
+      "expression": "df.groupby('g')['v'].sum().tolist()",
+      "expected_value": "[10, 5]",
+      "actual_value": "[10, 5]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-022",
+      "setup": "df=pd.DataFrame({'g':['x','x','y'],'v':[2,np.nan,6]})",
+      "expression": "df.groupby('g')['v'].count().tolist()",
+      "expected_value": "[1, 1]",
+      "actual_value": "[1, 1]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-023",
+      "setup": "df=pd.DataFrame({'g':['x','x','y'],'v':[2,np.nan,6]})",
+      "expression": "df.groupby('g').size().tolist()",
+      "expected_value": "[2, 1]",
+      "actual_value": "[2, 1]",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-024",
+      "setup": "df=pd.DataFrame({'g':['a','a','b'],'v':[2,8,9]})",
+      "expression": "df.groupby('g')['v'].mean().tolist()",
+      "expected_value": "[5.0, 9.0]",
+      "actual_value": "[5.0, 9.0]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-025",
+      "setup": "s=pd.Series(['b','a','b','c','b'])",
+      "expression": "int(s.value_counts().loc['b'])",
+      "expected_value": "3",
+      "actual_value": "3",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-026",
+      "setup": "s=pd.Series([4,4,9,9,9])",
+      "expression": "int(s.nunique())",
+      "expected_value": "2",
+      "actual_value": "2",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-027",
+      "setup": "df=pd.DataFrame({'g':['a','a','b'],'v':[2,5,7]})",
+      "expression": "df.groupby('g')['v'].transform('sum').tolist()",
+      "expected_value": "[7, 7, 7]",
+      "actual_value": "[7, 7, 7]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-028",
+      "setup": "s=pd.Series([2,3,5])",
+      "expression": "s.cumsum().tolist()",
+      "expected_value": "[2, 5, 10]",
+      "actual_value": "[2, 5, 10]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-029",
+      "setup": "s=pd.Series([1,4,7,10])",
+      "expression": "float(s.median())",
+      "expected_value": "5.5",
+      "actual_value": "5.5",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-030",
+      "setup": "df=pd.DataFrame({'g':['b','a','b'],'v':[1,2,3]})",
+      "expression": "df.groupby('g',sort=False)['v'].sum().index.tolist()",
+      "expected_value": "['b', 'a']",
+      "actual_value": "['b', 'a']",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/groupby.html"
+    },
+    {
+      "id": "pandas-031",
+      "setup": "a=pd.DataFrame({'k':[1,2],'x':[4,5]}); b=pd.DataFrame({'k':[2,3],'y':[8,9]})",
+      "expression": "a.merge(b,on='k',how='inner')['k'].tolist()",
+      "expected_value": "[2]",
+      "actual_value": "[2]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-032",
+      "setup": "a=pd.DataFrame({'k':[1,2]}); b=pd.DataFrame({'k':[2,3],'v':[8,9]})",
+      "expression": "int(len(a.merge(b,on='k',how='left')))",
+      "expected_value": "2",
+      "actual_value": "2",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-033",
+      "setup": "a=pd.DataFrame({'x':[1]},index=[7]); b=pd.DataFrame({'x':[2]},index=[8])",
+      "expression": "pd.concat([a,b],ignore_index=True).index.tolist()",
+      "expected_value": "[0, 1]",
+      "actual_value": "[0, 1]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-034",
+      "setup": "df=pd.DataFrame({'id':[1,2],'a':[3,4],'b':[5,6]})",
+      "expression": "int(len(df.melt(id_vars='id')))",
+      "expected_value": "4",
+      "actual_value": "4",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-035",
+      "setup": "df=pd.DataFrame({'r':['a','a','b'],'c':['x','y','x'],'v':[2,3,4]})",
+      "expression": "float(df.pivot(index='r',columns='c',values='v').loc['a','y'])",
+      "expected_value": "3.0",
+      "actual_value": "3.0",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-036",
+      "setup": "df=pd.DataFrame({'a':[1,1,2],'b':[3,3,4]})",
+      "expression": "int(len(df.drop_duplicates()))",
+      "expected_value": "2",
+      "actual_value": "2",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-037",
+      "setup": "df=pd.DataFrame({'a':[1,1,2],'b':[3,4,5]})",
+      "expression": "df.drop_duplicates(subset=['a'],keep='last')['b'].tolist()",
+      "expected_value": "[4, 5]",
+      "actual_value": "[4, 5]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-038",
+      "setup": "df=pd.DataFrame({'a':[[1,2],[3]],'b':['x','y']})",
+      "expression": "df.explode('a')['a'].tolist()",
+      "expected_value": "[1, 2, 3]",
+      "actual_value": "[1, 2, 3]",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-039",
+      "setup": "a=pd.DataFrame({'x':[1,2]}); b=pd.DataFrame({'y':[3,4,5]})",
+      "expression": "int(len(a.merge(b,how='cross')))",
+      "expected_value": "6",
+      "actual_value": "6",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-040",
+      "setup": "df=pd.DataFrame({'a':[1,2],'b':[3,4]})",
+      "expression": "list(df.T.shape)",
+      "expected_value": "[2, 2]",
+      "actual_value": "[2, 2]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/merging.html"
+    },
+    {
+      "id": "pandas-041",
+      "setup": "s=pd.Series(['aa','b','ccc'])",
+      "expression": "s.str.len().tolist()",
+      "expected_value": "[2, 1, 3]",
+      "actual_value": "[2, 1, 3]",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-042",
+      "setup": "s=pd.Series([' a ','b  '])",
+      "expression": "s.str.strip().tolist()",
+      "expected_value": "['a', 'b']",
+      "actual_value": "['a', 'b']",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-043",
+      "setup": "s=pd.Series(['Ab','cD'])",
+      "expression": "s.str.lower().tolist()",
+      "expected_value": "['ab', 'cd']",
+      "actual_value": "['ab', 'cd']",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-044",
+      "setup": "s=pd.Series(['a.b','axb'])",
+      "expression": "s.str.contains('.',regex=False).tolist()",
+      "expected_value": "[True, False]",
+      "actual_value": "[True, False]",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-045",
+      "setup": "s=pd.Series(['red','blue','red'])",
+      "expression": "s.map({'red':1,'blue':2}).tolist()",
+      "expected_value": "[1, 2, 1]",
+      "actual_value": "[1, 2, 1]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-046",
+      "setup": "s=pd.Series(['2','5'])",
+      "expression": "s.astype(int).sum().item()",
+      "expected_value": "7",
+      "actual_value": "7",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-047",
+      "setup": "s=pd.Series(['12','oops','7'])",
+      "expression": "int(pd.to_numeric(s,errors='coerce').isna().sum())",
+      "expected_value": "1",
+      "actual_value": "1",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-048",
+      "setup": "s=pd.to_datetime(pd.Series(['2024-02-03','2025-11-09']))",
+      "expression": "s.dt.month.tolist()",
+      "expected_value": "[2, 11]",
+      "actual_value": "[2, 11]",
+      "expected": "C",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-049",
+      "setup": "s=pd.Series(['a','b','a'],dtype='category')",
+      "expression": "s.cat.codes.tolist()",
+      "expected_value": "[0, 1, 0]",
+      "actual_value": "[0, 1, 0]",
+      "expected": "A",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    },
+    {
+      "id": "pandas-050",
+      "setup": "s=pd.Series(['abc','def'])",
+      "expression": "s.str.slice(0,2).tolist()",
+      "expected_value": "['ab', 'de']",
+      "actual_value": "['ab', 'de']",
+      "expected": "B",
+      "source": "Original executable fixture v1; semantics: https://pandas.pydata.org/pandas-docs/version/2.3.3/user_guide/text.html"
+    }
+  ]
+}

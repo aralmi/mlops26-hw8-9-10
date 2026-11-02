@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 import release
+import journal
 
 
 def canonical(value):
@@ -42,7 +43,7 @@ def initialize(root):
         report={k:m[k] for k in ['model_id','model_sha256','protocol_sha256','golden_sha256','runtime_sha256']}
         report.update(status='complete',passed=True,evaluation_run_id=f'fixture-eval-{version}',metrics={'accuracy':.8,'format_rate':1.0},synthetic=True)
         write(root/f'manifest-{version}.json',m);write(root/f'report-{version}.json',report)
-    write(root/'accepted.json',read(root/'manifest-A.json'))
+    journal.commit(root, read(root/'manifest-A.json'), read(root/'report-A.json'))
     report=read(root/'report-B.json');report['status']='running';report['passed']='false'
     write(root/'report-incomplete.json',report)
     report=read(root/'report-B.json');report['passed']=False
@@ -62,13 +63,12 @@ def prepare(root):
     write(entry,result);print('PREPARED',result['input_sha256']);return result
 
 
-def run(root,report_name,fail_after_prepare=False):
+def run(root,report_name,fail_after_prepare=False,fail_after_pointer=False):
+    journal.attempt(root, 'START', report=report_name)
     prepared=prepare(root)
     if fail_after_prepare:raise RuntimeError('Инъекция сбоя после подготовки')
     manifest=read(root/'manifest-B.json');report=read(root/report_name)
-    release.publish(manifest,report,root/'accepted.json')
-    with (root/'publications.jsonl').open('a') as f:
-        f.write(json.dumps({'model_id':manifest['model_id'],'prepared':prepared['input_sha256']})+'\n')
+    journal.commit(root, manifest, report, fail_after_pointer=fail_after_pointer)
     print('PUBLISHED',manifest['model_id'])
 
 
@@ -76,9 +76,12 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--workspace',type=Path,default=Path('.lab'))
     sub=parser.add_subparsers(dest='command',required=True);sub.add_parser('init')
     run_parser=sub.add_parser('run');run_parser.add_argument('--report',default='report-B.json');run_parser.add_argument('--fail-after-prepare',action='store_true')
+    run_parser.add_argument('--fail-after-pointer', action='store_true')
+    rollback_parser=sub.add_parser('rollback');rollback_parser.add_argument('release_id')
     args=parser.parse_args()
     if args.command=='init':initialize(args.workspace)
-    else:run(args.workspace,args.report,args.fail_after_prepare)
+    elif args.command=='rollback':journal.rollback(args.workspace, args.release_id)
+    else:run(args.workspace,args.report,args.fail_after_prepare,args.fail_after_pointer)
 
 
 if __name__=='__main__':main()

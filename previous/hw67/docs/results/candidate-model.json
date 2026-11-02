@@ -1,0 +1,7 @@
+{
+  "kind": "adapter",
+  "name": "pandas-qwen-adapter",
+  "version": "1",
+  "run_id": "1efd3e7eeda54bfc9ee161cf28065807",
+  "uri": "models:/pandas-qwen-adapter/1"
+}

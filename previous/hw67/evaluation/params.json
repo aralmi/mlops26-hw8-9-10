@@ -1,0 +1,10 @@
+{
+  "golden": "data/eval/golden.jsonl",
+  "training_index": "data/eval/training-index.jsonl",
+  "behavioral": "data/eval/behavioral.jsonl",
+  "critical_slices": ["indexing", "missing_data"],
+  "seed": 42,
+  "system": "You answer multiple-choice questions about Python pandas 2.3.3 only. Return only a JSON object with exactly one field: answer. Its value must be a string label from the choices in the question. Do not add explanations or Markdown. For any question outside pandas data analysis, return {\"answer\":\"REFUSE\"}.",
+  "max_new_tokens": 32,
+  "enable_thinking": false
+}

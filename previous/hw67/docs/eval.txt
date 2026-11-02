@@ -1,0 +1,5 @@
+uv run python -m evaluation.cli gate
+Отказ: Общая accuracy ухудшилась; Accuracy критического среза indexing ухудшилась; Не все обязательные behavioral-кейсы пройдены
+make: *** [eval] Error 1
+
+Exit code: 2

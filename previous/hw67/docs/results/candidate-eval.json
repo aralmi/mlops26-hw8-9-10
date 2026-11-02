@@ -1,0 +1,800 @@
+{
+  "overall": {
+    "n": 50,
+    "correct": 11,
+    "valid": 50,
+    "errors": 0,
+    "accuracy": 0.22,
+    "format_rate": 1.0
+  },
+  "slices": {
+    "aggregation": {
+      "n": 10,
+      "correct": 1,
+      "valid": 10,
+      "errors": 0,
+      "accuracy": 0.1,
+      "format_rate": 1.0
+    },
+    "indexing": {
+      "n": 10,
+      "correct": 1,
+      "valid": 10,
+      "errors": 0,
+      "accuracy": 0.1,
+      "format_rate": 1.0
+    },
+    "missing_data": {
+      "n": 10,
+      "correct": 5,
+      "valid": 10,
+      "errors": 0,
+      "accuracy": 0.5,
+      "format_rate": 1.0
+    },
+    "reshape": {
+      "n": 10,
+      "correct": 2,
+      "valid": 10,
+      "errors": 0,
+      "accuracy": 0.2,
+      "format_rate": 1.0
+    },
+    "types_text": {
+      "n": 10,
+      "correct": 2,
+      "valid": 10,
+      "errors": 0,
+      "accuracy": 0.2,
+      "format_rate": 1.0
+    }
+  },
+  "per_item": [
+    {
+      "id": "pandas-001",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-002",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-003",
+      "raw": "{\"answer\":\"B\"}",
+      "parsed": {
+        "answer": "B"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-004",
+      "raw": "{\"answer\":\"B\"}",
+      "parsed": {
+        "answer": "B"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-005",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-006",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-007",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-008",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-009",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-010",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "indexing"
+      ]
+    },
+    {
+      "id": "pandas-011",
+      "raw": "{\"answer\":\"B\"}",
+      "parsed": {
+        "answer": "B"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-012",
+      "raw": "{\"answer\":\"C\"}",
+      "parsed": {
+        "answer": "C"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-013",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-014",
+      "raw": "{\"answer\":\"B\"}",
+      "parsed": {
+        "answer": "B"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-015",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-016",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-017",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-018",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-019",
+      "raw": "{\"answer\":\"C\"}",
+      "parsed": {
+        "answer": "C"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-020",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "missing_data"
+      ]
+    },
+    {
+      "id": "pandas-021",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-022",
+      "raw": "{\"answer\":\"C\"}",
+      "parsed": {
+        "answer": "C"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-023",
+      "raw": "{\"answer\":\"C\"}",
+      "parsed": {
+        "answer": "C"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-024",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-025",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-026",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-027",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-028",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-029",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-030",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "aggregation"
+      ]
+    },
+    {
+      "id": "pandas-031",
+      "raw": "{\n  \"answer\": \"A\"\n}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-032",
+      "raw": "{\n  \"answer\": \"A\"\n}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-033",
+      "raw": "{\n  \"answer\": \"A\"\n}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-034",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-035",
+      "raw": "{\n  \"answer\": \"A\"\n}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-036",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-037",
+      "raw": "{\n  \"answer\": \"A\"\n}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-038",
+      "raw": "{\n  \"answer\": \"A\"\n}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-039",
+      "raw": "{\n  \"answer\": \"A\"\n}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-040",
+      "raw": "{\"answer\":\"C\"}",
+      "parsed": {
+        "answer": "C"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "reshape"
+      ]
+    },
+    {
+      "id": "pandas-041",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-042",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-043",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-044",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-045",
+      "raw": "{\"answer\":\"C\"}",
+      "parsed": {
+        "answer": "C"
+      },
+      "valid": true,
+      "correct": true,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-046",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-047",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-048",
+      "raw": "{\"answer\":\"A\"}",
+      "parsed": {
+        "answer": "A"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-049",
+      "raw": "{\"answer\":\"C\"}",
+      "parsed": {
+        "answer": "C"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    },
+    {
+      "id": "pandas-050",
+      "raw": "{\"answer\":\"REFUSE\"}",
+      "parsed": {
+        "answer": "REFUSE"
+      },
+      "valid": true,
+      "correct": false,
+      "error": null,
+      "slices": [
+        "types_text"
+      ]
+    }
+  ],
+  "status": "complete",
+  "model": {
+    "kind": "adapter",
+    "name": "pandas-qwen-adapter",
+    "version": "1",
+    "run_id": "1efd3e7eeda54bfc9ee161cf28065807",
+    "uri": "models:/pandas-qwen-adapter/1"
+  },
+  "protocol_sha256": "b60f60fc45a76a8e90314acb183f93511a6c716a0c52108e89b14b4b6f7d42f1",
+  "golden_sha256": "6648ed25b9cc6156c22ca4b2368059c38bf53d35db460e826050fba9557b7f74",
+  "baseline_spec_sha256": "f71269b95f6b4e1e160fa25e9af6c973517cfebad15880b75b56c8184680b163",
+  "behavioral": {
+    "overall": {
+      "n": 3,
+      "correct": 2,
+      "valid": 3,
+      "errors": 0,
+      "accuracy": 0.6666666666666666,
+      "format_rate": 1.0
+    },
+    "slices": {
+      "format": {
+        "n": 1,
+        "correct": 1,
+        "valid": 1,
+        "errors": 0,
+        "accuracy": 1.0,
+        "format_rate": 1.0
+      },
+      "paraphrase": {
+        "n": 1,
+        "correct": 1,
+        "valid": 1,
+        "errors": 0,
+        "accuracy": 1.0,
+        "format_rate": 1.0
+      },
+      "refusal": {
+        "n": 1,
+        "correct": 0,
+        "valid": 1,
+        "errors": 0,
+        "accuracy": 0.0,
+        "format_rate": 1.0
+      }
+    },
+    "per_item": [
+      {
+        "id": "behavior-format",
+        "raw": "{\n  \"answer\": \"B\"\n}",
+        "parsed": {
+          "answer": "B"
+        },
+        "valid": true,
+        "correct": true,
+        "error": null,
+        "slices": [
+          "format"
+        ]
+      },
+      {
+        "id": "behavior-paraphrase",
+        "raw": "{\"answer\":\"C\"}",
+        "parsed": {
+          "answer": "C"
+        },
+        "valid": true,
+        "correct": true,
+        "error": null,
+        "slices": [
+          "paraphrase"
+        ]
+      },
+      {
+        "id": "behavior-refusal",
+        "raw": "{\"answer\":\"A\"}",
+        "parsed": {
+          "answer": "A"
+        },
+        "valid": true,
+        "correct": false,
+        "error": null,
+        "slices": [
+          "refusal"
+        ]
+      }
+    ]
+  },
+  "leakage": {
+    "exact_or_group_intersections": 0,
+    "n_train_index": 1388,
+    "n_golden": 50,
+    "n_behavioral": 3
+  },
+  "outputs_sha256": "5d5ddfbaee554f64c6f6eca7819018e45897f2f827966e53ec003df529e5ae09",
+  "evaluation_run_id": "136e937e3f4a47cbbcc820f505159d2e"
+}

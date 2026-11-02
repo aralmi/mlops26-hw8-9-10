@@ -1,0 +1,4 @@
+{
+  "passed": false,
+  "reason": "Общая accuracy ухудшилась; Accuracy критического среза indexing ухудшилась; Не все обязательные behavioral-кейсы пройдены"
+}

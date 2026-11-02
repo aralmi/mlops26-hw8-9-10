@@ -1,0 +1,35 @@
+{
+  "source_repository": "https://github.com/aralmi/mlops26-hw4",
+  "source_commit": "026e8c94671f30ae9fb2ca3cccbc3018f41d3712",
+  "files": {
+    "train.pt": {
+      "sha256": "7f026d9fbc6f5c8cef9b6505dd663642b50bab23a151d545bc5f7e127a5e11c9",
+      "size": 8336737
+    },
+    "val.pt": {
+      "sha256": "fa29644781ac07898b46accef2b64a4f0ba1a70dfae52137a0ff1314fb9f819e",
+      "size": 838485
+    }
+  },
+  "raw_train_sha256": "0d75504b4bd1dfea39742cfc182a17318bfc53c115fb1d58a851010c0673c37e",
+  "n_raw_train": 1388,
+  "n_tokenized_train": 1388,
+  "ordered_ids_match": true,
+  "tokenization": "ДЗ4: src/tokenize_data.py, params.yaml и dvc.lock по source_commit",
+  "retokenization_proof": {
+    "reencoded_train": 1388,
+    "all_ids_tokens_masks_labels_match": true
+  },
+  "attribution_sha256": "f438b77cc0b97d1b1adf84423296595ae33ac7952f63fd13007c60194ebc9932",
+  "leakage": {
+    "exact_or_group_intersections": 0,
+    "n_train_index": 1388,
+    "n_golden": 50,
+    "n_behavioral": 3
+  },
+  "golden_label_counts": {
+    "A": 17,
+    "B": 17,
+    "C": 16
+  }
+}

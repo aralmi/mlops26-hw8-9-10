@@ -8,3 +8,12 @@ models/
 *.bin
 *.pt
 .lab*/
+.runtime/
+.prefect/
+.uv-cache/
+.evidence-work/
+*.egg-info/
+.DS_Store
+*.mov
+*.mp4
+artifacts/

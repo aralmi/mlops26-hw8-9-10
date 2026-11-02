@@ -1,0 +1,320 @@
+[
+  {
+    "id": "pandas-001",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.757293833004951
+  },
+  {
+    "id": "pandas-002",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.809014209000452
+  },
+  {
+    "id": "pandas-003",
+    "raw": "{\"answer\":\"B\"}",
+    "error": null,
+    "latency_seconds": 0.8171470829984173
+  },
+  {
+    "id": "pandas-004",
+    "raw": "{\"answer\":\"B\"}",
+    "error": null,
+    "latency_seconds": 0.7348347500010277
+  },
+  {
+    "id": "pandas-005",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7262547920036013
+  },
+  {
+    "id": "pandas-006",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7301675420021638
+  },
+  {
+    "id": "pandas-007",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.8096034159971168
+  },
+  {
+    "id": "pandas-008",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.8429132910023327
+  },
+  {
+    "id": "pandas-009",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7361925000004703
+  },
+  {
+    "id": "pandas-010",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.7922729999991134
+  },
+  {
+    "id": "pandas-011",
+    "raw": "{\"answer\":\"B\"}",
+    "error": null,
+    "latency_seconds": 0.7245430409966502
+  },
+  {
+    "id": "pandas-012",
+    "raw": "{\"answer\":\"C\"}",
+    "error": null,
+    "latency_seconds": 0.7956332499961718
+  },
+  {
+    "id": "pandas-013",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7489416249954957
+  },
+  {
+    "id": "pandas-014",
+    "raw": "{\"answer\":\"B\"}",
+    "error": null,
+    "latency_seconds": 0.754407792002894
+  },
+  {
+    "id": "pandas-015",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.8046475000010105
+  },
+  {
+    "id": "pandas-016",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7325671250000596
+  },
+  {
+    "id": "pandas-017",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.790363541993429
+  },
+  {
+    "id": "pandas-018",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.8092019579999032
+  },
+  {
+    "id": "pandas-019",
+    "raw": "{\"answer\":\"C\"}",
+    "error": null,
+    "latency_seconds": 0.7504820000031032
+  },
+  {
+    "id": "pandas-020",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.740964583994355
+  },
+  {
+    "id": "pandas-021",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.7830605420022039
+  },
+  {
+    "id": "pandas-022",
+    "raw": "{\"answer\":\"C\"}",
+    "error": null,
+    "latency_seconds": 0.744366999999329
+  },
+  {
+    "id": "pandas-023",
+    "raw": "{\"answer\":\"C\"}",
+    "error": null,
+    "latency_seconds": 0.7583119580012863
+  },
+  {
+    "id": "pandas-024",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.8335998330003349
+  },
+  {
+    "id": "pandas-025",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7403580409954884
+  },
+  {
+    "id": "pandas-026",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.7921731669994188
+  },
+  {
+    "id": "pandas-027",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.8361077919980744
+  },
+  {
+    "id": "pandas-028",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.8160204579980928
+  },
+  {
+    "id": "pandas-029",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7238810829949216
+  },
+  {
+    "id": "pandas-030",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.8374174999989918
+  },
+  {
+    "id": "pandas-031",
+    "raw": "{\n  \"answer\": \"A\"\n}",
+    "error": null,
+    "latency_seconds": 1.0174343750040862
+  },
+  {
+    "id": "pandas-032",
+    "raw": "{\n  \"answer\": \"A\"\n}",
+    "error": null,
+    "latency_seconds": 1.0010442920029163
+  },
+  {
+    "id": "pandas-033",
+    "raw": "{\n  \"answer\": \"A\"\n}",
+    "error": null,
+    "latency_seconds": 1.0403057080038707
+  },
+  {
+    "id": "pandas-034",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.799740374997782
+  },
+  {
+    "id": "pandas-035",
+    "raw": "{\n  \"answer\": \"A\"\n}",
+    "error": null,
+    "latency_seconds": 1.0173047089992906
+  },
+  {
+    "id": "pandas-036",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7383387910012971
+  },
+  {
+    "id": "pandas-037",
+    "raw": "{\n  \"answer\": \"A\"\n}",
+    "error": null,
+    "latency_seconds": 1.0331001249942346
+  },
+  {
+    "id": "pandas-038",
+    "raw": "{\n  \"answer\": \"A\"\n}",
+    "error": null,
+    "latency_seconds": 1.020490916002018
+  },
+  {
+    "id": "pandas-039",
+    "raw": "{\n  \"answer\": \"A\"\n}",
+    "error": null,
+    "latency_seconds": 0.9868662919980125
+  },
+  {
+    "id": "pandas-040",
+    "raw": "{\"answer\":\"C\"}",
+    "error": null,
+    "latency_seconds": 0.7337269590061624
+  },
+  {
+    "id": "pandas-041",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.796602125003119
+  },
+  {
+    "id": "pandas-042",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7429222080027102
+  },
+  {
+    "id": "pandas-043",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7397568750020582
+  },
+  {
+    "id": "pandas-044",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7414663749950705
+  },
+  {
+    "id": "pandas-045",
+    "raw": "{\"answer\":\"C\"}",
+    "error": null,
+    "latency_seconds": 0.7533890830018208
+  },
+  {
+    "id": "pandas-046",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.7897831660011434
+  },
+  {
+    "id": "pandas-047",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.811384332999296
+  },
+  {
+    "id": "pandas-048",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.7809122500038939
+  },
+  {
+    "id": "pandas-049",
+    "raw": "{\"answer\":\"C\"}",
+    "error": null,
+    "latency_seconds": 0.7509637500043027
+  },
+  {
+    "id": "pandas-050",
+    "raw": "{\"answer\":\"REFUSE\"}",
+    "error": null,
+    "latency_seconds": 0.7948611249958049
+  },
+  {
+    "id": "behavior-format",
+    "raw": "{\n  \"answer\": \"B\"\n}",
+    "error": null,
+    "latency_seconds": 0.9518127089977497
+  },
+  {
+    "id": "behavior-paraphrase",
+    "raw": "{\"answer\":\"C\"}",
+    "error": null,
+    "latency_seconds": 0.6905590840033256
+  },
+  {
+    "id": "behavior-refusal",
+    "raw": "{\"answer\":\"A\"}",
+    "error": null,
+    "latency_seconds": 0.6409192919963971
+  }
+]

@@ -1,0 +1,1 @@
+{"id":"example-pandas-1","group_id":"example-series","input":"For s=pd.Series([8,3]), what is int(s.iloc[0])? A: 3; B: 8. choices: A, B, REFUSE.","expected":"B","choices":["A","B","REFUSE"],"slices":["indexing"],"source":"Illustrative format only; actual 50 golden rows are in DVC data/eval/golden.jsonl"}
