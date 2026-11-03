@@ -73,7 +73,10 @@ def main():
             baseline=json.loads((ROOT/'previous/hw67/docs/results/baseline-outputs.json').read_text())
             expected=next(r['raw'] for r in baseline if r['id']==row['id'])
             assert actual['body']['answer']==expected, 'Output differs from old evaluated baseline: investigate runtime before release'
-            print(json.dumps(payload,ensure_ascii=False,indent=2))
+            print(json.dumps(dict(health=health['status'],
+                readiness_observed=sorted({r['status'] for r in observations}),
+                answer=actual['body'],invalid_status=invalid['status'],
+                matches_saved_eval=True),ensure_ascii=False,indent=2))
         finally:
             process.terminate()
             try:process.wait(timeout=10)

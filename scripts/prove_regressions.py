@@ -36,6 +36,10 @@ def main():
         failed = {entry['test'] for entry in result['failures']}
         if before == 0 or result['tests'] != 7 or len(failed) != 7 or result['errors'] or result['skipped']:
             raise SystemExit('Evidence invalid: expected seven assertion failures, not import/CLI errors')
+        startup_failures = ('Server did not expose /health', 'HTTP process exited',
+                            'Model never became ready', 'unrecognized arguments', 'No module named')
+        if any(marker in failure['traceback'] for failure in result['failures'] for marker in startup_failures):
+            raise SystemExit('Evidence invalid: startup/import failures do not prove an original defect')
         after_env = {**os.environ, 'HW8910_PROJECT':str(ROOT),
                      'HW8910_RUNNER':'lab.py','HW8910_SERVICE':'service.py'}
         after = record([sys.executable,'scripts/run_integrations.py','--json',str(logs/'after.json')],
@@ -47,9 +51,10 @@ def main():
                         logs/'target.txt', target_env)
         if target != 0:
             raise SystemExit('Prefect/FastAPI target failed; inspect target.txt')
-    difference = subprocess.check_output(['git','diff',ORIGINAL,'--','release.py','lab.py','service.py'],cwd=ROOT)
+    difference = subprocess.check_output(['git','diff',ORIGINAL,'--','release.py','lab.py','service.py',
+        'journal.py','api_core.py','backends.py','flow.py','flow_lab.py','preparation.py','api.py','lineage.py'],cwd=ROOT)
     (logs/'fix.diff').write_bytes(difference)
-    print('Seven assertion failures before; seven passes on each corrected adapter.')
+    print('Seven regression tests fail on the original and pass on both corrected adapters.')
 
 
 if __name__ == '__main__':

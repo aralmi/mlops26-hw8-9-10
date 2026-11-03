@@ -21,9 +21,12 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         raise SystemExit('Destination exists; select a new path to avoid mixing artifact versions')
+    import mlflow
     from mlflow import MlflowClient
     from mlflow.exceptions import MlflowException
     import yaml
+    # mlflow-artifacts resolves its HTTP proxy through the global tracking URI.
+    mlflow.set_tracking_uri(args.tracking_uri)
     client = MlflowClient(tracking_uri=args.tracking_uri)
     spec = journal.read(lineage.PREVIOUS/'docs/results/candidate-model.json')
     version = client.get_model_version(spec['name'], spec['version'])
@@ -43,6 +46,8 @@ def main():
                 raise
             time.sleep(attempt+1)
     meta = yaml.safe_load((downloaded/'MLmodel').read_text())
+    if meta.get('run_id') != spec['run_id']:
+        raise ValueError('Downloaded MLmodel belongs to another training run')
     adapter = (downloaded/meta['flavors']['python_function']['artifacts']['adapter']['path']).resolve()
     if not adapter.is_relative_to(downloaded.resolve()):
         raise ValueError('Adapter path escapes downloaded model')

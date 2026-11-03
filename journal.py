@@ -44,6 +44,10 @@ def recover(root):
     if not intent.exists():
         return
     pending = read(intent)
+    release.validate_release(pending['manifest'], pending['report'])
+    if identity(pending['manifest'], pending['report']) != pending['release_id']:
+        raise ValueError('Corrupt pending release identity')
+    release.verify_artifact(pending['manifest'], artifact_root(root, pending['manifest']))
     pointer = root / 'accepted.json'
     if pointer.exists() and read(pointer) == pending['manifest']:
         _finish(root, pending)
