@@ -1,0 +1,103 @@
+{
+  "synthetic": false,
+  "experiments": [
+    {
+      "label": "01-fail-after-prepare",
+      "command": [
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/bin/python",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py",
+        "--workspace",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process",
+        "--input",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process/input.jsonl",
+        "--fail-after-prepare"
+      ],
+      "exit_code": 1,
+      "input_sha256": "d1b108f77d692e312c0decf9249a565873f8e5b576a6079e2c1508c26ee2612a",
+      "accepted_before_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "accepted_after_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "preparation": "PREPARED"
+    },
+    {
+      "label": "02-recovered-rejected",
+      "command": [
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/bin/python",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py",
+        "--workspace",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process",
+        "--input",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process/input.jsonl"
+      ],
+      "exit_code": 1,
+      "input_sha256": "d1b108f77d692e312c0decf9249a565873f8e5b576a6079e2c1508c26ee2612a",
+      "accepted_before_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "accepted_after_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "preparation": "CACHE_HIT"
+    },
+    {
+      "label": "03-repeat-rejected",
+      "command": [
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/bin/python",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py",
+        "--workspace",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process",
+        "--input",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process/input.jsonl"
+      ],
+      "exit_code": 1,
+      "input_sha256": "d1b108f77d692e312c0decf9249a565873f8e5b576a6079e2c1508c26ee2612a",
+      "accepted_before_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "accepted_after_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "preparation": "CACHE_HIT"
+    },
+    {
+      "label": "04-changed-input",
+      "command": [
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/bin/python",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py",
+        "--workspace",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process",
+        "--input",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process/input.jsonl",
+        "--fail-after-prepare"
+      ],
+      "exit_code": 1,
+      "input_sha256": "27ee0720a51ded657cb6a5eb002fc942927825ad0b15460ba5b8aa82d4f26b35",
+      "accepted_before_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "accepted_after_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "preparation": "PREPARED"
+    },
+    {
+      "label": "05-changed-input-closed",
+      "command": [
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/bin/python",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py",
+        "--workspace",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process",
+        "--input",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process/input.jsonl"
+      ],
+      "exit_code": 1,
+      "input_sha256": "27ee0720a51ded657cb6a5eb002fc942927825ad0b15460ba5b8aa82d4f26b35",
+      "accepted_before_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "accepted_after_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "preparation": "CACHE_HIT"
+    },
+    {
+      "label": "06-restored-rejected",
+      "command": [
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/bin/python",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py",
+        "--workspace",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process",
+        "--input",
+        "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.runtime/real-process/input.jsonl"
+      ],
+      "exit_code": 1,
+      "input_sha256": "d1b108f77d692e312c0decf9249a565873f8e5b576a6079e2c1508c26ee2612a",
+      "accepted_before_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "accepted_after_sha256": "be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef",
+      "preparation": "CACHE_HIT"
+    }
+  ]
+}

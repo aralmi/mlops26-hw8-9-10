@@ -1,0 +1,5 @@
+$ make restart
+.venv/bin/python scripts/restart_real.py
+Two fresh real API processes loaded the accepted manifest and returned the same evaluated answer.
+
+Exit code: 0

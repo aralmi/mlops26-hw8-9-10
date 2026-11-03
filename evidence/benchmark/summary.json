@@ -1,0 +1,49 @@
+{
+  "request_ids": [
+    "pandas-001",
+    "pandas-002",
+    "pandas-003",
+    "pandas-004",
+    "pandas-005",
+    "pandas-006",
+    "pandas-007",
+    "pandas-008"
+  ],
+  "max_new_tokens": 32,
+  "ready": {
+    "ready": true,
+    "model_id": "base:Qwen/Qwen3-0.6B@c1899de289a04d12100db370d81485cdf75e47ca",
+    "runtime_sha256": "d11aea556984da9354c2deb6a01c05a12b71de7fdd512f1a5fd3cf8a421a32da",
+    "load_failed": false
+  },
+  "modes": [
+    {
+      "concurrency": 1,
+      "n": 8,
+      "successes": 8,
+      "errors": 0,
+      "batch_seconds": 5.674438457994256,
+      "successful_requests_per_second": 1.4098311329342992,
+      "mean_success_seconds": 0.7090414687481825,
+      "max_success_seconds": 0.7857805410167202,
+      "mean_error_seconds": null,
+      "max_error_seconds": null,
+      "actual_output_tokens": 57
+    },
+    {
+      "concurrency": 2,
+      "n": 8,
+      "successes": 8,
+      "errors": 0,
+      "batch_seconds": 5.6600951660075225,
+      "successful_requests_per_second": 1.4134037971737818,
+      "mean_success_seconds": 1.3158607549994485,
+      "max_success_seconds": 1.4797230000258423,
+      "mean_error_seconds": null,
+      "max_error_seconds": null,
+      "actual_output_tokens": 57
+    }
+  ],
+  "sample_note": "8+8",
+  "measurement": "Full response latency; no TTFT, ITL or p95 estimate."
+}

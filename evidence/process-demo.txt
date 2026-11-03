@@ -1,0 +1,5 @@
+$ make process-demo
+.venv/bin/python scripts/process_demo.py
+Saved process experiments: /Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/evidence/process
+
+Exit code: 0

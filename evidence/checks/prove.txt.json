@@ -1,0 +1,9 @@
+{
+  "command": [
+    "make",
+    "prove"
+  ],
+  "exit_code": 0,
+  "started_unix": 1793700020.21331,
+  "elapsed_seconds": 48.232362031936646
+}

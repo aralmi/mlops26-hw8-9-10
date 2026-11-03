@@ -1,0 +1,57 @@
+CACHE_HIT ea92e41ffbb810fe263f7144841168bf12bc39e7526865375c874acbb94cf40b
+12:51:32.835 | INFO    | prefect - Starting temporary server on http://127.0.0.1:8159
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+12:51:34.537 | WARNING | prefect.server - Unable to write to memo_store.toml at /Users/arsenij/.prefect/memo_store.toml after block auto-registration: FileNotFoundError(2, 'No such file or directory').
+ Subsequent server start ups will perform block auto-registration, which may result in slower server startup.
+12:51:34.699 | INFO    | Flow run 'gigantic-emu' - Beginning flow run 'gigantic-emu' for flow 'hw8910-release'
+12:51:34.728 | INFO    | Task run 'prepare-input-cdc' - Finished in state Cached(type=COMPLETED)
+12:51:34.750 | INFO    | Task run 'obtain-existing-artifact-65a' - Finished in state Completed()
+12:51:34.766 | INFO    | Task run 'evaluate-admission-945' - Finished in state Completed()
+12:51:34.767 | ERROR   | Flow run 'gigantic-emu' - Encountered exception during execution: ValueError('Quality gate rejected candidate; accepted baseline unchanged')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 788, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1409, in run_flow_sync
+    engine.call_flow_fn()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 808, in call_flow_fn
+    result = call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 106, in release_flow
+    raise ValueError('Quality gate rejected candidate; accepted baseline unchanged')
+ValueError: Quality gate rejected candidate; accepted baseline unchanged
+12:51:34.778 | INFO    | Flow run 'gigantic-emu' - Finished in state Failed('Flow run encountered an exception: ValueError: Quality gate rejected candidate; accepted baseline unchanged')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow_lab.py", line 28, in <module>
+    main()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow_lab.py", line 23, in main
+    release_flow(root, root/'input.txt', root/'manifest-B.json', root/'config.json',
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flows.py", line 1708, in __call__
+    return run_flow(
+           ^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1566, in run_flow
+    ret_val = run_flow_sync(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1411, in run_flow_sync
+    return engine.state if return_type == "state" else engine.result()
+                                                       ^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 361, in result
+    raise self._raised
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 788, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1409, in run_flow_sync
+    engine.call_flow_fn()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 808, in call_flow_fn
+    result = call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 106, in release_flow
+    raise ValueError('Quality gate rejected candidate; accepted baseline unchanged')
+ValueError: Quality gate rejected candidate; accepted baseline unchanged
+12:51:34.785 | INFO    | prefect - Stopping temporary server on http://127.0.0.1:8159
+
+Exit code: 1

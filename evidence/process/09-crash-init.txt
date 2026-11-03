@@ -1,0 +1,3 @@
+Создан синтетический стенд: /var/folders/t3/4qj_4k256mxg4l2py__407l00000gn/T/hw8910-process-w1e_vgae/crash
+
+Exit code: 0

@@ -1,0 +1,14 @@
+CACHE_HIT 1a3668c6f736aa37d263aebf121141add4d8514a1a553f1ce930a6327e648d20
+12:51:47.219 | INFO    | prefect - Starting temporary server on http://127.0.0.1:8717
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+12:51:48.857 | WARNING | prefect.server - Unable to write to memo_store.toml at /Users/arsenij/.prefect/memo_store.toml after block auto-registration: FileNotFoundError(2, 'No such file or directory').
+ Subsequent server start ups will perform block auto-registration, which may result in slower server startup.
+12:51:48.979 | INFO    | Flow run 'sandy-tortoise' - Beginning flow run 'sandy-tortoise' for flow 'hw8910-release'
+12:51:49.006 | INFO    | Task run 'prepare-input-1a5' - Finished in state Cached(type=COMPLETED)
+12:51:49.028 | INFO    | Task run 'obtain-existing-artifact-f2b' - Finished in state Completed()
+12:51:49.044 | INFO    | Task run 'evaluate-admission-1b1' - Finished in state Completed()
+12:51:49.060 | INFO    | Task run 'publish-accepted-pointer-3ce' - Finished in state Completed()
+12:51:49.069 | INFO    | Flow run 'sandy-tortoise' - Finished in state Completed()
+12:51:49.075 | INFO    | prefect - Stopping temporary server on http://127.0.0.1:8717
+
+Exit code: 0

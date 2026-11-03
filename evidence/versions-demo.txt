@@ -1,0 +1,5 @@
+$ make versions-demo
+.venv/bin/python scripts/versions_demo.py
+STUB ONLY: A -> B -> A verified through real HTTP restarts.
+
+Exit code: 0

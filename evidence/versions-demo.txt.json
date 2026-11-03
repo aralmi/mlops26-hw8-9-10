@@ -1,0 +1,9 @@
+{
+  "command": [
+    "make",
+    "versions-demo"
+  ],
+  "exit_code": 0,
+  "started_unix": 1793699510.216453,
+  "elapsed_seconds": 1.4623408317565918
+}

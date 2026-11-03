@@ -1,0 +1,1042 @@
+diff --git a/api.py b/api.py
+new file mode 100644
+index 0000000..820723c
+--- /dev/null
++++ b/api.py
+@@ -0,0 +1,71 @@
++"""FastAPI entry point with the same command/HTTP contract as service.py."""
++import argparse
++import asyncio
++from contextlib import asynccontextmanager
++from pathlib import Path
++
++from fastapi import FastAPI, Request
++from fastapi.responses import JSONResponse
++
++from api_core import RequestError, ServiceState
++
++
++def create_app(root=Path('.runtime'), backend='transformers', warmup_seconds=0):
++    @asynccontextmanager
++    async def lifespan(app):
++        app.state.model = ServiceState(root, warmup_seconds, backend)
++        yield
++        # Do not tear down a model while a worker is computing. uvicorn drains requests.
++
++    app = FastAPI(title='Pandas model release API', lifespan=lifespan)
++
++    @app.get('/health')
++    def health():
++        return {'alive': True, 'backend': backend}
++
++    @app.get('/ready')
++    def ready():
++        state = app.state.model
++        return JSONResponse(status_code=200 if state.ready else 503, content={
++            'ready': state.ready, 'model_id': state.backend.loaded_id if state.ready else None,
++            'runtime_sha256': state.backend.runtime_sha256 if state.ready else None,
++            'load_failed': state.error is not None})
++
++    @app.post('/generate')
++    async def generate(request: Request):
++        body = bytearray()
++        async for chunk in request.stream():
++            body.extend(chunk)
++            if len(body) > 65536:
++                return JSONResponse(status_code=413, content={'error': 'Body too large'})
++        try:
++            import json
++            payload = json.loads(body)
++            result = await asyncio.to_thread(app.state.model.generate, payload)
++            return result
++        except RequestError as exc:
++            return JSONResponse(status_code=exc.status, content={'error': str(exc)})
++        except (ValueError, TypeError) as exc:
++            return JSONResponse(status_code=422, content={'error': str(exc)})
++
++    if backend == 'stub':
++        @app.get('/debug')
++        def debug():
++            return app.state.model.debug()
++    return app
++
++
++def main():
++    import uvicorn
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--workspace', type=Path, default=Path('.runtime'))
++    parser.add_argument('--port', type=int, default=8091)
++    parser.add_argument('--warmup-seconds', type=float, default=0)
++    parser.add_argument('--backend', choices=['stub', 'transformers'], default='transformers')
++    args = parser.parse_args()
++    uvicorn.run(create_app(args.workspace, args.backend, args.warmup_seconds),
++                host='127.0.0.1', port=args.port, workers=1)
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/api_core.py b/api_core.py
+new file mode 100644
+index 0000000..afbb1f2
+--- /dev/null
++++ b/api_core.py
+@@ -0,0 +1,96 @@
++"""HTTP-independent validation, startup and serialized inference."""
++import json
++import threading
++import time
++import uuid
++from pathlib import Path
++
++from backends import StubBackend, TransformersBackend
++import journal
++import release
++
++
++class RequestError(ValueError):
++    def __init__(self, status, message):
++        self.status = status
++        super().__init__(message)
++
++
++class ServiceState:
++    def __init__(self, root, warmup_seconds=0, backend_kind='stub'):
++        self.root = Path(root)
++        self.manifest = journal.read(self.root / 'accepted.json')
++        self.backend = None
++        self.error = None
++        self.warmup_finished = threading.Event()
++        self.compute = threading.Lock()
++        self.inflight = threading.BoundedSemaphore(8)
++        self.backend_kind = backend_kind
++        self.thread = threading.Thread(target=self._load, args=(warmup_seconds,), daemon=True)
++        self.thread.start()
++
++    @property
++    def ready(self):
++        return self.warmup_finished.is_set() and self.error is None
++
++    def _load(self, seconds):
++        try:
++            manifest = self.manifest
++            release.verify_artifact(manifest, journal.artifact_root(self.root, manifest))
++            synthetic = manifest['runtime'].get('base_revision') == 'fixture-only'
++            if synthetic != (self.backend_kind == 'stub'):
++                raise ValueError('Stub / real artifact mismatch')
++            if not synthetic:
++                from lineage import verify_accepted
++                verify_accepted(self.root, manifest)
++            backend = StubBackend(manifest) if synthetic else TransformersBackend(manifest)
++            time.sleep(seconds)
++            backend.generate('In pandas, select the first row. Choices: A. df.iloc[0] B. df.iloc[1] C. df.iloc[2]',
++                             manifest['runtime']['generation']['max_new_tokens'])
++            self.backend = backend
++            self.warmup_finished.set()
++        except Exception as exc:
++            self.error = f'{type(exc).__name__}: {exc}'
++            import logging
++            logging.exception('Model loading/warmup failed')
++
++    def debug(self):
++        return dict(loaded_id=self.backend.loaded_id if self.backend else None,
++                    calls=self.backend.calls if self.backend else 0,
++                    warmup_finished=self.warmup_finished.is_set(), ready=self.ready)
++
++    def validate(self, request):
++        if not isinstance(request, dict) or set(request) - {'prompt', 'max_new_tokens'}:
++            raise RequestError(422, 'Expected prompt and optional max_new_tokens')
++        prompt = request.get('prompt')
++        if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 8000:
++            raise RequestError(422, 'prompt must contain 1..8000 characters')
++        evaluated = self.manifest['runtime']['generation']['max_new_tokens']
++        limit = request.get('max_new_tokens', evaluated)
++        if type(limit) is not int or not 1 <= limit <= evaluated:
++            raise RequestError(422, f'max_new_tokens must be an integer in 1..{evaluated}')
++        if self.backend_kind != 'stub' and limit != evaluated:
++            raise RequestError(422, f'Evaluated API requires max_new_tokens={evaluated}')
++        return prompt, limit
++
++    def generate(self, request):
++        started = time.perf_counter()
++        prompt, limit = self.validate(request)
++        if not self.ready:
++            raise RequestError(503, 'Model not ready')
++        if not self.inflight.acquire(blocking=False):
++            raise RequestError(429, 'Inference queue full')
++        try:
++            with self.compute:
++                computing = time.perf_counter()
++                try:
++                    result = self.backend.generate(prompt, limit)
++                except ValueError as exc:
++                    raise RequestError(422, str(exc)) from exc
++                finished = time.perf_counter()
++        finally:
++            self.inflight.release()
++        result.update(model_id=self.backend.loaded_id, runtime_sha256=self.backend.runtime_sha256,
++                      request_id=str(uuid.uuid4()), generation_seconds=finished-computing,
++                      queue_seconds=computing-started, total_seconds=finished-started)
++        return result
+diff --git a/backends.py b/backends.py
+new file mode 100644
+index 0000000..ec3e2ed
+--- /dev/null
++++ b/backends.py
+@@ -0,0 +1,72 @@
++"""Interchangeable backends. Importing this module never loads model weights."""
++import time
++
++
++class StubBackend:
++    synthetic = True
++
++    def __init__(self, manifest):
++        self.loaded_id = manifest['model_id']
++        self.runtime_sha256 = manifest['runtime_sha256']
++        self.calls = 0
++
++    def generate(self, prompt, limit):
++        self.calls += 1
++        time.sleep(.01)
++        return {'answer': f'STUB ONLY: {self.loaded_id}', 'output_tokens': 1}
++
++
++class TransformersBackend:
++    synthetic = False
++
++    def __init__(self, manifest):
++        import importlib.metadata
++        import random
++        import numpy as np
++        import torch
++        from transformers import AutoModelForCausalLM, AutoTokenizer
++        from journal import artifact_root
++        runtime = manifest['runtime']
++        for package, version in runtime['packages'].items():
++            if importlib.metadata.version(package) != version:
++                raise ValueError(f'Runtime package mismatch: {package}')
++        if runtime['device'] != 'cpu' or runtime['dtype'] != 'float32':
++            raise ValueError('This evaluated backend is pinned to CPU / float32')
++        torch.set_num_threads(runtime['threads'])
++        random.seed(runtime['generation']['seed'])
++        np.random.seed(runtime['generation']['seed'])
++        torch.manual_seed(runtime['generation']['seed'])
++        root = artifact_root('.', manifest)
++        tokenizer_root = root / manifest.get('tokenizer_subdir', '.')
++        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_root, local_files_only=True)
++        base_root = root / manifest.get('base_subdir', '.')
++        self.model = AutoModelForCausalLM.from_pretrained(base_root, dtype=torch.float32,
++                                                        local_files_only=True)
++        if manifest['model_kind'] == 'adapter':
++            from peft import PeftModel
++            self.model = PeftModel.from_pretrained(self.model, root / manifest['adapter_subdir'],
++                                                  local_files_only=True)
++        self.model = self.model.to('cpu').eval()
++        self.runtime = runtime
++        self.loaded_id = manifest['model_id']
++        self.runtime_sha256 = manifest['runtime_sha256']
++        self.calls = 0
++
++    def generate(self, prompt, limit):
++        import torch
++        g = self.runtime['generation']
++        if limit != g['max_new_tokens']:
++            raise ValueError('Generation limit differs from evaluated runtime')
++        text = self.tokenizer.apply_chat_template(
++            [{'role': 'system', 'content': g['system']}, {'role': 'user', 'content': prompt}],
++            tokenize=False, add_generation_prompt=True, enable_thinking=g['enable_thinking'])
++        batch = self.tokenizer(text, return_tensors='pt', add_special_tokens=False)
++        if batch['input_ids'].shape[1] > self.runtime['max_input_tokens']:
++            raise ValueError('Input exceeds token limit')
++        self.calls += 1
++        with torch.inference_mode():
++            output = self.model.generate(**batch, max_new_tokens=limit, do_sample=False,
++                pad_token_id=self.tokenizer.pad_token_id or self.tokenizer.eos_token_id)
++        tokens = output[0, batch['input_ids'].shape[1]:]
++        return {'answer': self.tokenizer.decode(tokens, skip_special_tokens=True),
++                'output_tokens': int(tokens.shape[0])}
+diff --git a/flow.py b/flow.py
+new file mode 100644
+index 0000000..23059a3
+--- /dev/null
++++ b/flow.py
+@@ -0,0 +1,124 @@
++"""Local Prefect release flow; operates on descriptors, never model tensors."""
++import argparse
++import os
++from pathlib import Path
++
++# Set before importing Prefect; all persistent state stays in the ignored workspace.
++os.environ.setdefault('PREFECT_HOME', str(Path('.prefect').resolve()))
++os.environ.setdefault('PREFECT_LOCAL_STORAGE_PATH', str(Path('.prefect/results').resolve()))
++os.environ.setdefault('PREFECT_SERVER_ANALYTICS_ENABLED', 'false')
++
++from prefect import flow, task
++from prefect.cache_policies import NO_CACHE
++
++import journal
++import preparation
++import release
++
++
++def preparation_key(context, parameters):
++    return release.digest(release.canonical({
++        'workspace': str(Path(parameters['root']).resolve()),
++        'key': release.cache_key(Path(parameters['data_path']), parameters['config'])}))
++
++
++@task(name='prepare-input', cache_key_fn=preparation_key, persist_result=True,
++      result_serializer='json', retries=0)
++def prepare_task(root, data_path, config):
++    return preparation.prepare(root, data_path, config)
++
++
++@task(name='obtain-existing-artifact', cache_policy=NO_CACHE, retries=0)
++def obtain_task(root, manifest_path):
++    manifest = journal.read(manifest_path)
++    release.verify_artifact(manifest, journal.artifact_root(root, manifest))
++    return dict(manifest_uri=str(Path(manifest_path).resolve()),
++                manifest_sha256=release.digest(release.canonical(manifest)),
++                model_id=manifest['model_id'], note='Read existing artifact; no training')
++
++
++@task(name='evaluate-admission', cache_policy=NO_CACHE, retries=0)
++def admission_task(root, artifact, synthetic_report=None):
++    manifest = journal.read(artifact['manifest_uri'])
++    if release.digest(release.canonical(manifest)) != artifact['manifest_sha256']:
++        raise ValueError('Manifest changed between tasks')
++    if synthetic_report:
++        report = journal.read(synthetic_report)
++        if manifest['runtime'].get('base_revision') != 'fixture-only' or report.get('synthetic') is not True:
++            raise ValueError('Synthetic route requires explicitly marked fixture data')
++    else:
++        import lineage
++        report = lineage.release_report(manifest)
++    path = Path(root) / 'release-report.json'
++    release.write_json(path, report)  # Preserve REJECT as well as PASS.
++    return dict(report_uri=str(path.resolve()), report_sha256=release.digest(release.canonical(report)),
++                passed=report['passed'])
++
++
++@task(name='publish-accepted-pointer', cache_policy=NO_CACHE, retries=0)
++def publish_task(root, artifact, admission, fail_after_pointer, synthetic_report=None):
++    manifest, report = journal.read(artifact['manifest_uri']), journal.read(admission['report_uri'])
++    if release.digest(release.canonical(manifest)) != artifact['manifest_sha256']:
++        raise ValueError('Manifest changed before publication')
++    if release.digest(release.canonical(report)) != admission['report_sha256']:
++        raise ValueError('Report changed before publication')
++    # A saved passed=True is insufficient: recompute the original full gate here.
++    if synthetic_report:
++        if report != journal.read(synthetic_report) or manifest['runtime'].get('base_revision') != 'fixture-only':
++            raise ValueError('Changed fixture report')
++    else:
++        import lineage
++        if report != lineage.release_report(manifest):
++            raise ValueError('Report is not the bound full quality decision')
++    return journal.commit(root, manifest, report, fail_after_pointer=fail_after_pointer)
++
++
++@flow(name='hw8910-release', persist_result=True, retries=0)
++def release_flow(root, data_path, manifest_path, config_path,
++                 fail_after_prepare=False, fail_after_pointer=False, synthetic_report=None):
++    before = release.digest((Path(root)/'accepted.json').read_bytes()) if (Path(root)/'accepted.json').exists() else None
++    journal.attempt(root, 'FLOW_START', accepted_before_sha256=before)
++    config = {**journal.read(config_path), 'code_revision': preparation.code_revision()}
++    if synthetic_report:
++        config = {**config, 'format': 'fixture-text',
++                  'preparation_code_sha256': release.digest(Path(preparation.__file__).read_bytes())}
++    prepared = prepare_task(str(root), str(data_path), config, return_state=True)
++    descriptor = prepared.result()
++    journal.attempt(root, 'PREPARATION_STATE', state=prepared.name, cache_key=descriptor['cache_key'])
++    print('CACHE_HIT' if prepared.name == 'Cached' else 'PREPARATION_EXECUTED', descriptor['cache_key'], flush=True)
++    # Validate that a persisted Prefect descriptor still points to a real intact result.
++    if release.digest(Path(descriptor['output_uri']).read_bytes()) != descriptor['output_sha256']:
++        raise ValueError('Persisted prepared output changed')
++    if fail_after_prepare:
++        raise RuntimeError('Injected failure after preparation')
++    if not synthetic_report:
++        import lineage
++        expected_input = lineage.ROOT/'evidence/hw67/data/eval/golden.jsonl'
++        if descriptor['input_sha256'] != release.digest(expected_input.read_bytes()):
++            raise ValueError('Prepared input differs from the evaluated golden set; evaluate again')
++    artifact = obtain_task(str(root), str(manifest_path))
++    admission = admission_task(str(root), artifact, synthetic_report)
++    if admission['passed'] is not True:
++        after = release.digest((Path(root)/'accepted.json').read_bytes()) if (Path(root)/'accepted.json').exists() else None
++        journal.attempt(root, 'REJECTED', accepted_before_sha256=before, accepted_after_sha256=after)
++        if before != after:
++            raise RuntimeError('REJECT changed accepted pointer')
++        raise ValueError('Quality gate rejected candidate; accepted baseline unchanged')
++    return publish_task(str(root), artifact, admission, fail_after_pointer, synthetic_report)
++
++
++def main():
++    p = argparse.ArgumentParser()
++    p.add_argument('--workspace', type=Path, default=Path('.runtime'))
++    p.add_argument('--input', type=Path, default=Path('evidence/hw67/data/eval/golden.jsonl'))
++    p.add_argument('--manifest', type=Path)
++    p.add_argument('--config', type=Path)
++    p.add_argument('--fail-after-prepare', action='store_true')
++    p.add_argument('--fail-after-pointer', action='store_true')
++    a = p.parse_args()
++    release_flow(a.workspace, a.input, a.manifest or a.workspace/'manifest-candidate.json',
++                 a.config or a.workspace/'prepare-config.json', a.fail_after_prepare, a.fail_after_pointer)
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/flow_lab.py b/flow_lab.py
+new file mode 100644
+index 0000000..d0d4246
+--- /dev/null
++++ b/flow_lab.py
+@@ -0,0 +1,28 @@
++"""Explicit STUB ONLY adapter preserving the original lab.py CLI for tests."""
++import argparse
++from pathlib import Path
++
++import lab
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--workspace', type=Path, default=Path('.lab-prefect'))
++    sub = parser.add_subparsers(dest='command', required=True)
++    sub.add_parser('init')
++    run = sub.add_parser('run')
++    run.add_argument('--report', default='report-B.json')
++    run.add_argument('--fail-after-prepare', action='store_true')
++    run.add_argument('--fail-after-pointer', action='store_true')
++    args = parser.parse_args()
++    if args.command == 'init':
++        lab.initialize(args.workspace)
++        return
++    from flow import release_flow
++    root = args.workspace
++    release_flow(root, root/'input.txt', root/'manifest-B.json', root/'config.json',
++                 args.fail_after_prepare, args.fail_after_pointer, str(root/args.report))
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/journal.py b/journal.py
+new file mode 100644
+index 0000000..d8f3960
+--- /dev/null
++++ b/journal.py
+@@ -0,0 +1,108 @@
++"""Recoverable local publication journal; explicitly supports one writer."""
++import json
++import time
++import uuid
++from pathlib import Path
++
++import release
++
++
++def read(path):
++    return json.loads(Path(path).read_text())
++
++
++def attempt(root, event, **fields):
++    root = Path(root)
++    root.mkdir(parents=True, exist_ok=True)
++    record = dict(attempt_id=str(uuid.uuid4()), time_ns=time.time_ns(), event=event, **fields)
++    with (root / 'attempts.jsonl').open('a') as stream:
++        stream.write(json.dumps(record, ensure_ascii=False, allow_nan=False) + '\n')
++        stream.flush()
++    return record
++
++
++def identity(manifest, report):
++    return release.digest(release.canonical({'manifest': manifest, 'decision': report}))
++
++
++def _finish(root, pending):
++    history = root / 'release-history'
++    history.mkdir(exist_ok=True)
++    release.write_json(history / (pending['release_id'] + '.json'), pending)
++    events_path = root / 'publication-events.json'
++    events = read(events_path) if events_path.exists() else {}
++    events.setdefault(pending['event_id'], pending)
++    release.write_json(events_path, events)
++    release.atomic_bytes(root / 'publications.jsonl', b''.join(
++        release.canonical(value) + b'\n' for value in events.values()))
++    (root / 'release-intent.json').unlink(missing_ok=True)
++
++
++def recover(root):
++    root = Path(root)
++    intent = root / 'release-intent.json'
++    if not intent.exists():
++        return
++    pending = read(intent)
++    release.validate_release(pending['manifest'], pending['report'])
++    if identity(pending['manifest'], pending['report']) != pending['release_id']:
++        raise ValueError('Corrupt pending release identity')
++    release.verify_artifact(pending['manifest'], artifact_root(root, pending['manifest']))
++    pointer = root / 'accepted.json'
++    if pointer.exists() and read(pointer) == pending['manifest']:
++        _finish(root, pending)
++        attempt(root, 'RECOVERED_PUBLICATION', release_id=pending['release_id'])
++    elif (release.digest(pointer.read_bytes()) if pointer.exists() else None) == pending['previous_sha256']:
++        intent.unlink()
++        attempt(root, 'DISCARDED_UNCOMMITTED_INTENT')
++    else:
++        raise ValueError('Pointer/journal conflict: manual recovery required')
++
++
++def commit(root, manifest, report, *, fail_after_pointer=False, action='release', verify=True):
++    root = Path(root)
++    release.validate_release(manifest, report)
++    if verify:
++        release.verify_artifact(manifest, artifact_root(root, manifest))
++    recover(root)
++    target = root / 'accepted.json'
++    release_id = identity(manifest, report)
++    events = read(root / 'publication-events.json') if (root / 'publication-events.json').exists() else {}
++    if target.exists() and read(target) == manifest and any(
++            e['release_id'] == release_id for e in events.values()):
++        attempt(root, 'ALREADY_PUBLISHED', release_id=release_id)
++        return release_id
++    previous = release.digest(target.read_bytes()) if target.exists() else None
++    event_id = release_id if action == 'release' else release.digest(release.canonical(
++        {'rollback_to': release_id, 'from_pointer_sha256': previous}))
++    pending = dict(release_id=release_id, event_id=event_id, model_id=manifest['model_id'],
++                   manifest=manifest, report=report, action=action, previous_sha256=previous)
++    release.write_json(root / 'release-intent.json', pending)
++    try:
++        release.publish(manifest, report, target)
++    except Exception:
++        (root / 'release-intent.json').unlink(missing_ok=True)
++        raise
++    if fail_after_pointer:
++        raise RuntimeError('Injected failure between pointer and journal')
++    _finish(root, pending)
++    attempt(root, 'PUBLISHED', release_id=release_id, action=action)
++    return release_id
++
++
++def artifact_root(root, manifest):
++    uri = manifest['artifact_uri']
++    if uri.startswith('file://'):
++        return Path(uri[7:])
++    path = Path(uri)
++    if path.is_absolute():
++        return path
++    path = Path(root) / path
++    return path.parent if path.is_file() else path
++
++
++def rollback(root, release_id):
++    record = read(Path(root) / 'release-history' / (release_id + '.json'))
++    if record['release_id'] != release_id or identity(record['manifest'], record['report']) != release_id:
++        raise ValueError('Corrupt release history')
++    return commit(root, record['manifest'], record['report'], action='rollback')
+diff --git a/lab.py b/lab.py
+index 135024c..8f0b656 100644
+--- a/lab.py
++++ b/lab.py
+@@ -8,6 +8,7 @@ import hashlib
+ import json
+ from pathlib import Path
+ import release
++import journal
+ 
+ 
+ def canonical(value):
+@@ -42,7 +43,7 @@ def initialize(root):
+         report={k:m[k] for k in ['model_id','model_sha256','protocol_sha256','golden_sha256','runtime_sha256']}
+         report.update(status='complete',passed=True,evaluation_run_id=f'fixture-eval-{version}',metrics={'accuracy':.8,'format_rate':1.0},synthetic=True)
+         write(root/f'manifest-{version}.json',m);write(root/f'report-{version}.json',report)
+-    write(root/'accepted.json',read(root/'manifest-A.json'))
++    journal.commit(root, read(root/'manifest-A.json'), read(root/'report-A.json'))
+     report=read(root/'report-B.json');report['status']='running';report['passed']='false'
+     write(root/'report-incomplete.json',report)
+     report=read(root/'report-B.json');report['passed']=False
+@@ -62,13 +63,12 @@ def prepare(root):
+     write(entry,result);print('PREPARED',result['input_sha256']);return result
+ 
+ 
+-def run(root,report_name,fail_after_prepare=False):
++def run(root,report_name,fail_after_prepare=False,fail_after_pointer=False):
++    journal.attempt(root, 'START', report=report_name)
+     prepared=prepare(root)
+     if fail_after_prepare:raise RuntimeError('Инъекция сбоя после подготовки')
+     manifest=read(root/'manifest-B.json');report=read(root/report_name)
+-    release.publish(manifest,report,root/'accepted.json')
+-    with (root/'publications.jsonl').open('a') as f:
+-        f.write(json.dumps({'model_id':manifest['model_id'],'prepared':prepared['input_sha256']})+'\n')
++    journal.commit(root, manifest, report, fail_after_pointer=fail_after_pointer)
+     print('PUBLISHED',manifest['model_id'])
+ 
+ 
+@@ -76,9 +76,12 @@ def main():
+     parser=argparse.ArgumentParser();parser.add_argument('--workspace',type=Path,default=Path('.lab'))
+     sub=parser.add_subparsers(dest='command',required=True);sub.add_parser('init')
+     run_parser=sub.add_parser('run');run_parser.add_argument('--report',default='report-B.json');run_parser.add_argument('--fail-after-prepare',action='store_true')
++    run_parser.add_argument('--fail-after-pointer', action='store_true')
++    rollback_parser=sub.add_parser('rollback');rollback_parser.add_argument('release_id')
+     args=parser.parse_args()
+     if args.command=='init':initialize(args.workspace)
+-    else:run(args.workspace,args.report,args.fail_after_prepare)
++    elif args.command=='rollback':journal.rollback(args.workspace, args.release_id)
++    else:run(args.workspace,args.report,args.fail_after_prepare,args.fail_after_pointer)
+ 
+ 
+ if __name__=='__main__':main()
+diff --git a/lineage.py b/lineage.py
+new file mode 100644
+index 0000000..0da0bb0
+--- /dev/null
++++ b/lineage.py
+@@ -0,0 +1,185 @@
++"""Recompute the HW6-7 decision from the unchanged raw evidence.
++
++The old baseline is an existing accepted version, not a newly passing candidate.
++No model is loaded by this module.
++"""
++import copy
++import hashlib
++import json
++import sys
++from pathlib import Path
++
++import journal
++import release
++
++ROOT = Path(__file__).resolve().parent
++PREVIOUS = ROOT / 'previous' / 'hw67'
++sys.path.insert(0, str(PREVIOUS))
++from evaluation.contract import fingerprint, read_rows, validate_golden
++from evaluation.solution import quality_gate, score
++
++
++def checked_previous():
++    source = journal.read(ROOT / 'previous/source.json')
++    for name, expected in source['files'].items():
++        if release.digest((PREVIOUS / name).read_bytes()) != expected:
++            raise ValueError('Changed HW6-7 source/evidence: ' + name)
++    return source
++
++
++def evidence():
++    checked_previous()
++    config = journal.read(PREVIOUS / 'evaluation/params.json')
++    folder = ROOT / 'evidence/hw67'
++    rows = read_rows(folder / config['golden'])
++    training = read_rows(folder / config['training_index'])
++    behavioral = read_rows(folder / config['behavioral'])
++    proof = validate_golden(rows, training, behavioral)
++    protocol = dict(config=config, golden=rows, behavioral=behavioral, training_index=training,
++                    evaluation_code={p.name: p.read_text() for p in sorted((PREVIOUS / 'evaluation').glob('*.py'))})
++    baseline_spec = journal.read(PREVIOUS / 'evaluation/baseline.json')
++    candidate_spec = journal.read(PREVIOUS / 'docs/results/candidate-model.json')
++    reports = {}
++    refs = {}
++    for role, spec in [('baseline', baseline_spec), ('candidate', candidate_spec)]:
++        report_path = PREVIOUS / f'docs/results/{role}-eval.json'
++        output_path = PREVIOUS / f'docs/results/{role}-outputs.json'
++        report, outputs = journal.read(report_path), journal.read(output_path)
++        by_id = {item['id']: item for item in outputs}
++        if len(by_id) != len(outputs) or set(by_id) != {r['id'] for r in rows + behavioral}:
++            raise ValueError('Output ID mismatch')
++        expected = dict(model=spec, protocol_sha256=fingerprint(protocol),
++                        golden_sha256=fingerprint(rows), baseline_spec_sha256=fingerprint(baseline_spec),
++                        outputs_sha256=fingerprint(outputs), leakage=proof, status='complete')
++        if any(report.get(k) != v for k, v in expected.items()):
++            raise ValueError(f'Stale {role} report')
++        recalculated = score(rows, [by_id[r['id']] for r in rows])
++        if any(report.get(k) != recalculated[k] for k in ('overall', 'slices', 'per_item')):
++            raise ValueError('Metrics/raw output mismatch')
++        if report['behavioral'] != score(behavioral, [by_id[r['id']] for r in behavioral]):
++            raise ValueError('Behavioral/raw output mismatch')
++        for path in (report_path, output_path):
++            refs[str(path.relative_to(ROOT))] = release.digest(path.read_bytes())
++        reports[role] = report
++    return config, reports, refs
++
++
++def runtime_for(tokenizer_root):
++    config = journal.read(PREVIOUS / 'evaluation/params.json')
++    baseline = journal.read(PREVIOUS / 'evaluation/baseline.json')
++    token_files = {}
++    for name in ('tokenizer.json', 'tokenizer_config.json', 'vocab.json', 'merges.txt',
++                 'added_tokens.json', 'special_tokens_map.json', 'chat_template.jinja'):
++        path = Path(tokenizer_root) / name
++        if path.exists():
++            token_files[name] = release.digest(path.read_bytes())
++    if not {'tokenizer.json', 'tokenizer_config.json'} <= token_files.keys():
++        raise ValueError('Tokenizer files missing')
++    cfg = journal.read(Path(tokenizer_root) / 'tokenizer_config.json')
++    template_file = Path(tokenizer_root) / 'chat_template.jinja'
++    template = template_file.read_text() if template_file.exists() else cfg.get('chat_template')
++    if not isinstance(template, str) or not template:
++        raise ValueError('Chat template missing')
++    return dict(base_name=baseline['name'], base_revision=baseline['revision'],
++                tokenizer_sha256=release.digest(release.canonical(token_files)),
++                template_sha256=release.digest(template.encode()), device='cpu', dtype='float32',
++                threads=4, max_input_tokens=4096,
++                packages={'torch': '2.9.1', 'transformers': '4.57.1', 'peft': '0.18.1', 'numpy': '2.3.2'},
++                generation=dict(system=config['system'], seed=config['seed'], do_sample=False,
++                                enable_thinking=config['enable_thinking'], max_new_tokens=config['max_new_tokens']))
++
++
++def verify_base_inventory(manifest):
++    inventory = journal.read(ROOT/'config/base-files.json')
++    prefix = '' if manifest['model_kind']=='base' else manifest['base_subdir'].rstrip('/')+'/'
++    expected = {prefix+name:value for name,value in inventory['files'].items()}
++    if any(manifest['file_hashes'].get(name)!=value for name,value in expected.items()):
++        raise ValueError('Base artifact differs from the pinned evaluated HF snapshot')
++    if manifest['runtime']['base_revision'] != inventory['revision']:
++        raise ValueError('Base revision mismatch')
++
++
++def release_report(manifest):
++    config, reports, refs = evidence()
++    candidate = reports['candidate']
++    verify_base_inventory(manifest)
++    expected_id = candidate['model']['run_id']
++    if manifest['model_id'] != expected_id or manifest['model_kind'] != 'adapter':
++        raise ValueError('Saved candidate evaluation belongs to another artifact')
++    if any(manifest[k] != candidate[k] for k in ('protocol_sha256', 'golden_sha256')):
++        raise ValueError('Manifest/evaluation protocol mismatch')
++    artifact = journal.artifact_root('.', manifest)
++    release.verify_artifact(manifest, artifact)
++    source_run = journal.read(artifact/'source-run.json')
++    if source_run.get('run_id') != expected_id or source_run.get('model_uri') != candidate['model']['uri']:
++        raise ValueError('Artifact export is not bound to the evaluated training run')
++    for name, expected in source_run['adapter_files'].items():
++        if manifest['file_hashes'].get(manifest['adapter_subdir']+'/'+name) != expected:
++            raise ValueError('Adapter export file hashes changed')
++    expected_runtime = runtime_for(artifact / manifest.get('tokenizer_subdir', '.'))
++    if manifest['runtime'] != expected_runtime:
++        raise ValueError('Runtime changed; a new full evaluation is required')
++    try:
++        decision = quality_gate(reports['baseline'], candidate, config['critical_slices'])
++        passed, reason = decision.get('passed') is True, None
++    except ValueError as exc:
++        passed, reason = False, str(exc)
++        decision = {'passed': False, 'reason': reason}
++    return dict(status='complete', passed=passed, reason=reason,
++                evaluation_run_id=candidate['evaluation_run_id'],
++                **{k: manifest[k] for k in ('model_id', 'model_sha256', 'protocol_sha256', 'golden_sha256', 'runtime_sha256')},
++                metrics={k: candidate['overall'][k] for k in ('accuracy', 'format_rate')},
++                decision=decision, evidence_sha256=refs, synthetic=False,
++                training_run_id=expected_id, source='HW6-7 saved full eval; no retraining')
++
++
++def bootstrap_baseline(root, manifest):
++    """Import the previous baseline explicitly; never manufacture a quality PASS."""
++    root = Path(root)
++    _, reports, refs = evidence()
++    baseline = reports['baseline']
++    verify_base_inventory(manifest)
++    expected_id = 'base:' + baseline['model']['name'] + '@' + baseline['model']['revision']
++    if manifest['model_kind'] != 'base' or manifest['model_id'] != expected_id:
++        raise ValueError('Only the pinned pre-existing baseline can be bootstrapped')
++    if any(manifest[k] != baseline[k] for k in ('protocol_sha256', 'golden_sha256')):
++        raise ValueError('Baseline manifest/eval mismatch')
++    path = journal.artifact_root(root, manifest)
++    release.verify_artifact(manifest, path)
++    if manifest['runtime'] != runtime_for(path):
++        raise ValueError('Baseline runtime changed; full evaluation required')
++    proof = dict(kind='preexisting-baseline', quality_passed=False,
++                 model_id=expected_id, manifest_sha256=release.digest(release.canonical(manifest)),
++                 evaluation_run_id=baseline['evaluation_run_id'], evidence_sha256=refs,
++                 source_baseline='previous/hw67/evaluation/baseline.json',
++                 note='Original accepted base retained after candidate rejection; not a new gate PASS.')
++    target = root / 'accepted.json'
++    if target.exists() and journal.read(target) != manifest:
++        raise ValueError('Bootstrap cannot overwrite another accepted version; use a managed release/rollback')
++    release.write_json(root / 'baseline-import.json', proof)
++    release.write_json(target, manifest)
++    journal.attempt(root, 'BASELINE_IMPORTED', model_id=expected_id, quality_passed=False)
++
++
++def verify_accepted(root, manifest):
++    root = Path(root)
++    verify_base_inventory(manifest)
++    if manifest.get('model_kind') == 'base':
++        proof = journal.read(root / 'baseline-import.json')
++        if proof.get('kind') != 'preexisting-baseline' or proof.get('quality_passed') is not False:
++            raise ValueError('Missing baseline import provenance')
++        if proof['manifest_sha256'] != release.digest(release.canonical(manifest)):
++            raise ValueError('Baseline pointer changed')
++        _, reports, refs = evidence()
++        expected = reports['baseline']['model']
++        if any(manifest[k] != reports['baseline'][k] for k in ('protocol_sha256','golden_sha256')):
++            raise ValueError('Baseline protocol/golden mismatch')
++        if (manifest['model_id'] != 'base:' + expected['name'] + '@' + expected['revision'] or
++                proof['evidence_sha256'] != refs or manifest['runtime'] != runtime_for(journal.artifact_root(root, manifest))):
++            raise ValueError('Baseline lineage/runtime mismatch')
++        return
++    record = next((journal.read(p) for p in (root / 'release-history').glob('*.json')
++                   if journal.read(p)['manifest'] == manifest), None)
++    if record is None or record['report'] != release_report(manifest):
++        raise ValueError('No bound acceptance decision for loaded model')
++    release.validate_release(manifest, record['report'])
+diff --git a/preparation.py b/preparation.py
+new file mode 100644
+index 0000000..3d29066
+--- /dev/null
++++ b/preparation.py
+@@ -0,0 +1,51 @@
++"""A real cached data validation stage; no tensors cross flow task boundaries."""
++import json
++from pathlib import Path
++
++import journal
++import release
++
++
++def configuration(manifest):
++    return dict(tokenizer_revision=manifest['runtime']['base_revision'],
++                tokenizer_sha256=manifest['runtime']['tokenizer_sha256'],
++                template_sha256=manifest['runtime']['template_sha256'],
++                max_length=manifest['runtime'].get('max_input_tokens', 128),
++                code_revision=code_revision(),
++                validation_contract='nonempty-unique-id-input-v1')
++
++
++def code_revision():
++    return release.digest(release.canonical({
++        name: release.digest(Path(path).read_bytes()) for name, path in
++        [('preparation.py', __file__), ('release.py', release.__file__)]}))
++
++
++def prepare(root, data_path, config):
++    root, data_path = Path(root), Path(data_path)
++    key = release.cache_key(data_path, config)
++    entry = root / 'cache' / (key + '.json')
++    output = root / 'prepared' / (key + '.jsonl')
++    if entry.exists() and output.exists():
++        cached = journal.read(entry)
++        if release.digest(output.read_bytes()) == cached['output_sha256']:
++            journal.attempt(root, 'CACHE_HIT', cache_key=key, output_uri=str(output.resolve()))
++            print('CACHE_HIT', key, flush=True)
++            return cached
++    lines = [line for line in data_path.read_text().splitlines() if line.strip()]
++    rows = ([{'id': str(i), 'input': line} for i, line in enumerate(lines)]
++            if config.get('format') == 'fixture-text' else [json.loads(line) for line in lines])
++    ids = [row.get('id') for row in rows]
++    if not rows or any(not isinstance(i, str) or not i for i in ids) or len(set(ids)) != len(ids):
++        raise ValueError('Input requires unique nonempty IDs')
++    if any(not isinstance(r.get('input'), str) or not r['input'].strip() for r in rows):
++        raise ValueError('Input requires nonempty text')
++    payload = b''.join(release.canonical(row) + b'\n' for row in rows)
++    release.atomic_bytes(output, payload)
++    result = dict(cache_key=key, input_sha256=release.digest(data_path.read_bytes()),
++                  output_sha256=release.digest(payload), output_uri=str(output.resolve()),
++                  rows=len(rows), config=config)
++    release.write_json(entry, result)
++    journal.attempt(root, 'PREPARED', cache_key=key, rows=len(rows))
++    print('PREPARED', key, flush=True)
++    return result
+diff --git a/release.py b/release.py
+index 45e8fee..d21398b 100644
+--- a/release.py
++++ b/release.py
+@@ -1,19 +1,118 @@
+-"""Учебный прототип выпуска. Реализация содержит дефекты; см. CONTRACTS.txt."""
++"""Contracts shared by the lightweight lab, Prefect flow and API."""
+ import hashlib
+ import json
++import math
++import os
++import re
++import tempfile
+ from pathlib import Path
+ 
++HASH = re.compile(r"[0-9a-f]{64}\Z")
++
++
++def canonical(value):
++    return json.dumps(value, sort_keys=True, separators=(',', ':'),
++                      ensure_ascii=False, allow_nan=False).encode('utf-8')
++
++
++def digest(value):
++    return hashlib.sha256(value).hexdigest()
++
+ 
+ def cache_key(data_path: Path, config: dict) -> str:
+-    return hashlib.sha256(str(data_path).encode()).hexdigest()
++    return digest(canonical({'data_sha256': digest(Path(data_path).read_bytes()), 'config': config}))
++
++
++def _string(value, field):
++    if not isinstance(value, str) or not value.strip():
++        raise ValueError(f'{field}: expected nonempty string')
++
++
++def validate_manifest(manifest):
++    if not isinstance(manifest, dict) or type(manifest.get('schema_version')) is not int or manifest['schema_version'] != 1:
++        raise ValueError('schema_version must be integer 1')
++    for field in ('model_id', 'artifact_uri'):
++        _string(manifest.get(field), field)
++    for field in ('model_sha256', 'protocol_sha256', 'golden_sha256', 'runtime_sha256'):
++        if not isinstance(manifest.get(field), str) or not HASH.fullmatch(manifest[field]):
++            raise ValueError(f'{field}: expected lowercase SHA-256')
++    runtime = manifest.get('runtime')
++    if not isinstance(runtime, dict) or not runtime:
++        raise ValueError('runtime must be a nonempty mapping')
++    try:
++        runtime_hash = digest(canonical(runtime))
++    except (TypeError, ValueError) as exc:
++        raise ValueError('runtime is not finite JSON') from exc
++    if runtime_hash != manifest['runtime_sha256']:
++        raise ValueError('runtime_sha256 mismatch')
+ 
+ 
+ def validate_release(manifest: dict, report: dict) -> None:
+-    if not report.get('passed'):
+-        raise ValueError('Кандидат отклонён')
++    validate_manifest(manifest)
++    if not isinstance(report, dict) or report.get('status') != 'complete' or report.get('passed') is not True:
++        raise ValueError('Complete boolean PASS required')
++    _string(report.get('evaluation_run_id'), 'evaluation_run_id')
++    for field in ('model_id', 'model_sha256', 'protocol_sha256', 'golden_sha256', 'runtime_sha256'):
++        if report.get(field) != manifest[field]:
++            raise ValueError(f'Unrelated report: {field}')
++    metrics = report.get('metrics')
++    if not isinstance(metrics, dict):
++        raise ValueError('metrics missing')
++    for field in ('accuracy', 'format_rate'):
++        value = metrics.get(field)
++        if type(value) not in (int, float) or not math.isfinite(value) or not 0 <= value <= 1:
++            raise ValueError(f'Invalid metric {field}')
++
++
++def atomic_bytes(target, payload):
++    """One writer. A failed replace never truncates the previous pointer."""
++    target = Path(target)
++    target.parent.mkdir(parents=True, exist_ok=True)
++    if target.exists() and target.read_bytes() == payload:
++        return
++    fd, name = tempfile.mkstemp(prefix='.' + target.name + '.', suffix='.tmp', dir=target.parent)
++    try:
++        with os.fdopen(fd, 'wb') as stream:
++            stream.write(payload)
++            stream.flush()
++            os.fsync(stream.fileno())
++        os.replace(name, target)
++        directory = os.open(target.parent, os.O_RDONLY)
++        try:
++            os.fsync(directory)
++        finally:
++            os.close(directory)
++    finally:
++        Path(name).unlink(missing_ok=True)
++
++
++def write_json(path, value):
++    atomic_bytes(path, canonical(value) + b'\n')
+ 
+ 
+ def publish(manifest: dict, report: dict, target: Path) -> None:
+     validate_release(manifest, report)
+-    target.parent.mkdir(parents=True, exist_ok=True)
+-    target.write_text(json.dumps(manifest, ensure_ascii=False, indent=2))
++    write_json(target, manifest)
++
++
++def verify_artifact(manifest, root):
++    """Hash the pinned files, not just a URI or a manifest field."""
++    validate_manifest(manifest)
++    root = Path(root).resolve()
++    files = manifest.get('file_hashes')
++    if not isinstance(files, dict) or not files:
++        raise ValueError('Pinned artifact file list missing')
++    if digest(canonical(files)) != manifest['model_sha256']:
++        raise ValueError('model_sha256 does not bind file list')
++    for name, expected in files.items():
++        rel = Path(name)
++        if rel.is_absolute() or '..' in rel.parts or not isinstance(expected, str) or not HASH.fullmatch(expected):
++            raise ValueError('Unsafe artifact entry')
++        # HF snapshots contain symlinks into a content-addressed blob store.
++        hasher = hashlib.sha256()
++        with (root / rel).open('rb') as stream:
++            for chunk in iter(lambda: stream.read(1024 * 1024), b''):
++                hasher.update(chunk)
++        if hasher.hexdigest() != expected:
++            raise ValueError(f'Artifact changed: {name}')
++    return root
+diff --git a/service.py b/service.py
+index 9ab3c3c..38189e6 100644
+--- a/service.py
++++ b/service.py
+@@ -1,43 +1,12 @@
+-"""Лёгкий HTTP-прототип с дефектами. Только localhost, STUB ONLY.
+-
+-Для итогового проекта перенесите исправленный контракт в FastAPI и подключите
+-загрузчик ДЗ 6+7. Прототип нужен для опытов без установки зависимостей и весов.
+-"""
++"""Dependency-free HTTP adapter for regression tests. Real API: api.py."""
+ import argparse
+ import json
+-import threading
+-import time
+-import uuid
+ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+ from pathlib import Path
+ 
+ 
+-class StubBackend:
+-    def __init__(self,manifest):
+-        self.loaded_id=manifest['model_id'];self.calls=0;self.runtime_sha256=manifest['runtime_sha256']
+-
+-    def generate(self,prompt,limit):
+-        self.calls+=1;time.sleep(.01)
+-        return {'answer':f'STUB ONLY: {self.loaded_id}', 'output_tokens':1}
+-
+-
+-class ServiceState:
+-    def __init__(self,root,warmup_seconds):
+-        self.root=root;self.ready=True
+-        manifest=json.loads((root/'accepted.json').read_text())
+-        self.backend=StubBackend(manifest)
+-        self.warmup_finished=threading.Event()
+-        def warmup():
+-            time.sleep(warmup_seconds);self.warmup_finished.set()
+-        threading.Thread(target=warmup,daemon=True).start()
+-
+-    def generate(self,request):
+-        started=time.perf_counter()
+-        result=self.backend.generate(request.get('prompt',''),request.get('max_new_tokens',32))
+-        advertised=json.loads((self.root/'accepted.json').read_text())
+-        result.update(model_id=advertised['model_id'],runtime_sha256=advertised['runtime_sha256'],
+-                      request_id=str(uuid.uuid4()),generation_seconds=time.perf_counter()-started)
+-        return result
++from api_core import RequestError, ServiceState
++from backends import StubBackend
+ 
+ 
+ def handler_for(state):
+@@ -50,19 +19,23 @@ def handler_for(state):
+         def do_GET(self):
+             if self.path=='/health':self.send_json(200,{'alive':True,'backend':'STUB ONLY'})
+             elif self.path=='/ready':self.send_json(200 if state.ready else 503,{'ready':state.ready})
+-            elif self.path=='/debug':
+-                self.send_json(200,{'loaded_id':state.backend.loaded_id,'calls':state.backend.calls,'warmup_finished':state.warmup_finished.is_set()})
++            elif self.path=='/debug':self.send_json(200,state.debug())
+             else:self.send_json(404,{'error':'not found'})
+ 
+         def do_POST(self):
+             if self.path!='/generate':self.send_json(404,{'error':'not found'});return
+-            size=int(self.headers.get('Content-Length','0'))
++            try:size=int(self.headers.get('Content-Length','0'))
++            except ValueError:self.send_json(400,{'error':'Invalid Content-Length'});return
+             if size<0 or size>65536:self.send_json(413,{'error':'body too large'});return
+             try:
+                 payload=json.loads(self.rfile.read(size))
+                 self.send_json(200,state.generate(payload))
++            except RequestError as e:
++                self.send_json(e.status, {'error': str(e)})
+             except (ValueError,TypeError,AttributeError,KeyError) as e:
+                 self.send_json(400,{'error':str(e)})
++            except Exception:
++                self.send_json(500, {'error':'Backend computation failed'})
+     return Handler
+ 
+ 

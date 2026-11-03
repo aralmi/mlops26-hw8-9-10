@@ -1,0 +1,9 @@
+$ make gate
+.venv/bin/python scripts/gate.py
+evaluation_run_id: 136e937e3f4a47cbbcc820f505159d2e
+candidate accuracy: 0.22
+accepted.json SHA-256 before/after: be927ec789966e280a42b9dd99745880e97b2eea5ddb541afc67908925a0ddef
+REJECT: Общая accuracy ухудшилась; Accuracy критического среза indexing ухудшилась; Не все обязательные behavioral-кейсы пройдены
+make: *** [gate] Error 1
+
+Exit code: 2

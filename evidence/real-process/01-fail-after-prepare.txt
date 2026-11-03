@@ -1,0 +1,56 @@
+PREPARED 7c9c9c7df0fe83d74900d98caaebba0a80691694c5cec41da922095999d678ff
+PREPARATION_EXECUTED 7c9c9c7df0fe83d74900d98caaebba0a80691694c5cec41da922095999d678ff
+12:55:11.916 | INFO    | prefect - Starting temporary server on http://127.0.0.1:8058
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+12:55:14.482 | WARNING | prefect.server - Unable to write to memo_store.toml at /Users/arsenij/.prefect/memo_store.toml after block auto-registration: FileNotFoundError(2, 'No such file or directory').
+ Subsequent server start ups will perform block auto-registration, which may result in slower server startup.
+12:55:14.670 | INFO    | Flow run 'meticulous-koala' - Beginning flow run 'meticulous-koala' for flow 'hw8910-release'
+12:55:14.708 | INFO    | Task run 'prepare-input-96c' - Finished in state Completed()
+12:55:14.709 | ERROR   | Flow run 'meticulous-koala' - Encountered exception during execution: RuntimeError('Injected failure after preparation')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 788, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1409, in run_flow_sync
+    engine.call_flow_fn()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 808, in call_flow_fn
+    result = call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 93, in release_flow
+    raise RuntimeError('Injected failure after preparation')
+RuntimeError: Injected failure after preparation
+12:55:14.728 | INFO    | Flow run 'meticulous-koala' - Finished in state Failed('Flow run encountered an exception: RuntimeError: Injected failure after preparation')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 124, in <module>
+    main()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 119, in main
+    release_flow(a.workspace, a.input, a.manifest or a.workspace/'manifest-candidate.json',
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flows.py", line 1708, in __call__
+    return run_flow(
+           ^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1566, in run_flow
+    ret_val = run_flow_sync(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1411, in run_flow_sync
+    return engine.state if return_type == "state" else engine.result()
+                                                       ^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 361, in result
+    raise self._raised
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 788, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1409, in run_flow_sync
+    engine.call_flow_fn()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 808, in call_flow_fn
+    result = call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 93, in release_flow
+    raise RuntimeError('Injected failure after preparation')
+RuntimeError: Injected failure after preparation
+12:55:14.742 | INFO    | prefect - Stopping temporary server on http://127.0.0.1:8058
+
+Exit code: 1

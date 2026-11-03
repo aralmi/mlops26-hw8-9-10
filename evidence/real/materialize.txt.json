@@ -1,0 +1,9 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "materialize.py"
+  ],
+  "exit_code": 0,
+  "started_unix": 1793699394.882108,
+  "elapsed_seconds": 2.098784923553467
+}

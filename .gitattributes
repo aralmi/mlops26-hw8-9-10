@@ -3,5 +3,5 @@
 *.md text eol=lf
 *.csv text eol=lf
 # Evidence and the previous source snapshot have byte-level checksums.
-evidence/** -text
+evidence/** -text -whitespace
 previous/** -text

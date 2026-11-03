@@ -1,0 +1,6 @@
+{
+  "archive": "config/candidate-artifact.json",
+  "model_sha256": "b73b3911e5fd94ee0ac70f6d18485485507f74ae5c746122f60fdc77047b2f73",
+  "runtime_sha256": "e932b389b5e9e0b91ca820725b60dca8a4dfaf53db32d4588dfb955d590317f1",
+  "matches_original_export": true
+}

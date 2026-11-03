@@ -1,0 +1,15 @@
+PREPARED ea92e41ffbb810fe263f7144841168bf12bc39e7526865375c874acbb94cf40b
+PREPARATION_EXECUTED ea92e41ffbb810fe263f7144841168bf12bc39e7526865375c874acbb94cf40b
+12:51:19.569 | INFO    | prefect - Starting temporary server on http://127.0.0.1:8963
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+12:51:21.255 | WARNING | prefect.server - Unable to write to memo_store.toml at /Users/arsenij/.prefect/memo_store.toml after block auto-registration: FileNotFoundError(2, 'No such file or directory').
+ Subsequent server start ups will perform block auto-registration, which may result in slower server startup.
+12:51:21.323 | INFO    | Flow run 'cinnamon-wildebeest' - Beginning flow run 'cinnamon-wildebeest' for flow 'hw8910-release'
+12:51:21.352 | INFO    | Task run 'prepare-input-6a3' - Finished in state Completed()
+12:51:21.372 | INFO    | Task run 'obtain-existing-artifact-161' - Finished in state Completed()
+12:51:21.388 | INFO    | Task run 'evaluate-admission-327' - Finished in state Completed()
+12:51:21.404 | INFO    | Task run 'publish-accepted-pointer-83e' - Finished in state Completed()
+12:51:21.414 | INFO    | Flow run 'cinnamon-wildebeest' - Finished in state Completed()
+12:51:21.420 | INFO    | prefect - Stopping temporary server on http://127.0.0.1:8963
+
+Exit code: 0

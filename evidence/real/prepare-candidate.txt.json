@@ -1,0 +1,11 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "materialize.py",
+    "--candidate-root",
+    ".runtime/artifacts/candidate"
+  ],
+  "exit_code": 0,
+  "started_unix": 1793699457.336349,
+  "elapsed_seconds": 2.208643913269043
+}

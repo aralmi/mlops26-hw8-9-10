@@ -1,0 +1,9 @@
+{
+  "command": [
+    "make",
+    "restart"
+  ],
+  "exit_code": 0,
+  "started_unix": 1793700014.895809,
+  "elapsed_seconds": 12.478148937225342
+}

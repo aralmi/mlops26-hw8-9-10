@@ -1,0 +1,103 @@
+{
+  "experiments": [
+    {
+      "label": "01-init",
+      "command": [
+        "init"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "02-fail-after-prepare",
+      "command": [
+        "run",
+        "--fail-after-prepare"
+      ],
+      "exit_code": 1
+    },
+    {
+      "label": "03-recovered",
+      "command": [
+        "run"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "04-repeat",
+      "command": [
+        "run"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "05-changed-input",
+      "command": [
+        "run"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "06-incomplete",
+      "command": [
+        "run",
+        "--report",
+        "report-incomplete.json"
+      ],
+      "exit_code": 1,
+      "accepted_before_sha256": "127ceb246bc351d54a6076230caf41aa78e7b4b552e2cc974353296980ed69e0",
+      "accepted_after_sha256": "127ceb246bc351d54a6076230caf41aa78e7b4b552e2cc974353296980ed69e0"
+    },
+    {
+      "label": "07-foreign",
+      "command": [
+        "run",
+        "--report",
+        "report-A.json"
+      ],
+      "exit_code": 1,
+      "accepted_before_sha256": "127ceb246bc351d54a6076230caf41aa78e7b4b552e2cc974353296980ed69e0",
+      "accepted_after_sha256": "127ceb246bc351d54a6076230caf41aa78e7b4b552e2cc974353296980ed69e0"
+    },
+    {
+      "label": "08-rejected",
+      "command": [
+        "run",
+        "--report",
+        "report-reject.json"
+      ],
+      "exit_code": 1,
+      "accepted_before_sha256": "127ceb246bc351d54a6076230caf41aa78e7b4b552e2cc974353296980ed69e0",
+      "accepted_after_sha256": "127ceb246bc351d54a6076230caf41aa78e7b4b552e2cc974353296980ed69e0"
+    },
+    {
+      "label": "09-crash-init",
+      "command": [
+        "init"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "10-crash-between-pointer-and-journal",
+      "command": [
+        "run",
+        "--fail-after-pointer"
+      ],
+      "exit_code": 1
+    },
+    {
+      "label": "11-recover-journal",
+      "command": [
+        "run"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "12-repeat-recovered",
+      "command": [
+        "run"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "synthetic": true
+}

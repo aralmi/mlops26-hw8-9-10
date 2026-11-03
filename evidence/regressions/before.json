@@ -1,0 +1,68 @@
+{
+  "tests": 7,
+  "failures": [
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_cache_survives_restart_but_changed_input_invalidates",
+      "case": "test_cache_survives_restart_but_changed_input_invalidates (incident_regressions.IncidentIntegrationTests.test_cache_survives_restart_but_changed_input_invalidates)",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 110, in test_cache_survives_restart_but_changed_input_invalidates\n    self.assertIn('PREPARED', changed.stdout, 'Changed bytes incorrectly reused old cache')\nAssertionError: 'PREPARED' not found in 'CACHE_HIT 88bbd559a04a7a432693a1c611ef2704bb711ac17dd5e22203ee9e5020f59fd4\\nPUBLISHED fixture-B\\n' : Changed bytes incorrectly reused old cache\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend",
+      "case": "test_http_invalid_requests_never_call_backend (incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend) (payload={'prompt': ''})",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 199, in test_http_invalid_requests_never_call_backend\n    self.assertTrue(400 <= self.http('/generate', payload)[0] < 500)\nAssertionError: False is not true\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend",
+      "case": "test_http_invalid_requests_never_call_backend (incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend) (payload={'prompt': 'test', 'max_new_tokens': 0})",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 199, in test_http_invalid_requests_never_call_backend\n    self.assertTrue(400 <= self.http('/generate', payload)[0] < 500)\nAssertionError: False is not true\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend",
+      "case": "test_http_invalid_requests_never_call_backend (incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend) (payload={'prompt': 'test', 'max_new_tokens': 100000})",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 199, in test_http_invalid_requests_never_call_backend\n    self.assertTrue(400 <= self.http('/generate', payload)[0] < 500)\nAssertionError: False is not true\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend",
+      "case": "test_http_invalid_requests_never_call_backend (incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend) (payload={'prompt': 'test', 'max_new_tokens': '32'})",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 199, in test_http_invalid_requests_never_call_backend\n    self.assertTrue(400 <= self.http('/generate', payload)[0] < 500)\nAssertionError: False is not true\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend",
+      "case": "test_http_invalid_requests_never_call_backend (incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend) (payload={'prompt': 'test', 'max_new_tokens': True})",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 199, in test_http_invalid_requests_never_call_backend\n    self.assertTrue(400 <= self.http('/generate', payload)[0] < 500)\nAssertionError: False is not true\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_http_loaded_version_changes_only_after_restart_and_rollback",
+      "case": "test_http_loaded_version_changes_only_after_restart_and_rollback (incident_regressions.IncidentIntegrationTests.test_http_loaded_version_changes_only_after_restart_and_rollback)",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 170, in test_http_loaded_version_changes_only_after_restart_and_rollback\n    self.assertEqual(response['model_id'], 'fixture-A')\nAssertionError: 'fixture-B' != 'fixture-A'\n- fixture-B\n?         ^\n+ fixture-A\n?         ^\n\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_http_ready_waits_for_warmup",
+      "case": "test_http_ready_waits_for_warmup (incident_regressions.IncidentIntegrationTests.test_http_ready_waits_for_warmup)",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 156, in test_http_ready_waits_for_warmup\n    self.assertEqual(self.http('/ready')[0], 503)\nAssertionError: 200 != 503\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_incomplete_and_foreign_reports_cannot_replace_pointer",
+      "case": "test_incomplete_and_foreign_reports_cannot_replace_pointer (incident_regressions.IncidentIntegrationTests.test_incomplete_and_foreign_reports_cannot_replace_pointer) (report='report-incomplete.json')",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 118, in test_incomplete_and_foreign_reports_cannot_replace_pointer\n    self.assertNotEqual(result.returncode, 0, result.stdout)\nAssertionError: 0 == 0 : PREPARED 88bbd559a04a7a432693a1c611ef2704bb711ac17dd5e22203ee9e5020f59fd4\nPUBLISHED fixture-B\n\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_incomplete_and_foreign_reports_cannot_replace_pointer",
+      "case": "test_incomplete_and_foreign_reports_cannot_replace_pointer (incident_regressions.IncidentIntegrationTests.test_incomplete_and_foreign_reports_cannot_replace_pointer) (report='report-A.json')",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 118, in test_incomplete_and_foreign_reports_cannot_replace_pointer\n    self.assertNotEqual(result.returncode, 0, result.stdout)\nAssertionError: 0 == 0 : CACHE_HIT 88bbd559a04a7a432693a1c611ef2704bb711ac17dd5e22203ee9e5020f59fd4\nPUBLISHED fixture-B\n\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_reject_and_atomic_replace_error_preserve_bytes",
+      "case": "test_reject_and_atomic_replace_error_preserve_bytes (incident_regressions.IncidentIntegrationTests.test_reject_and_atomic_replace_error_preserve_bytes)",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 150, in test_reject_and_atomic_replace_error_preserve_bytes\n    self.assertEqual(result.returncode, 0, result.stdout+result.stderr)\nAssertionError: 1 != 0 : Traceback (most recent call last):\n  File \"<string>\", line 10, in <module>\nAssertionError: Atomic replace was not used\n\n"
+    },
+    {
+      "test": "incident_regressions.IncidentIntegrationTests.test_repeat_in_separate_processes_has_one_publication",
+      "case": "test_repeat_in_separate_processes_has_one_publication (incident_regressions.IncidentIntegrationTests.test_repeat_in_separate_processes_has_one_publication)",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/integration/test_incidents.py\", line 126, in test_repeat_in_separate_processes_has_one_publication\n    self.assertEqual(len([e for e in events if e['model_id'] == 'fixture-B']), 1)\nAssertionError: 2 != 1\n"
+    }
+  ],
+  "errors": [],
+  "skipped": [],
+  "successful": false
+}

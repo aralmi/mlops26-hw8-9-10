@@ -1,0 +1,56 @@
+CACHE_HIT 9532e24c6498186d0d98b327ed4b5c4ad022df2ac572d2b586fc55ef20c1ef0f
+12:55:40.600 | INFO    | prefect - Starting temporary server on http://127.0.0.1:8546
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+12:55:43.058 | WARNING | prefect.server - Unable to write to memo_store.toml at /Users/arsenij/.prefect/memo_store.toml after block auto-registration: FileNotFoundError(2, 'No such file or directory').
+ Subsequent server start ups will perform block auto-registration, which may result in slower server startup.
+12:55:43.223 | INFO    | Flow run 'affable-sloth' - Beginning flow run 'affable-sloth' for flow 'hw8910-release'
+12:55:43.259 | INFO    | Task run 'prepare-input-e69' - Finished in state Cached(type=COMPLETED)
+12:55:43.262 | ERROR   | Flow run 'affable-sloth' - Encountered exception during execution: ValueError('Prepared input differs from the evaluated golden set; evaluate again')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 788, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1409, in run_flow_sync
+    engine.call_flow_fn()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 808, in call_flow_fn
+    result = call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 98, in release_flow
+    raise ValueError('Prepared input differs from the evaluated golden set; evaluate again')
+ValueError: Prepared input differs from the evaluated golden set; evaluate again
+12:55:43.281 | INFO    | Flow run 'affable-sloth' - Finished in state Failed('Flow run encountered an exception: ValueError: Prepared input differs from the evaluated golden set; evaluate again')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 124, in <module>
+    main()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 119, in main
+    release_flow(a.workspace, a.input, a.manifest or a.workspace/'manifest-candidate.json',
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flows.py", line 1708, in __call__
+    return run_flow(
+           ^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1566, in run_flow
+    ret_val = run_flow_sync(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1411, in run_flow_sync
+    return engine.state if return_type == "state" else engine.result()
+                                                       ^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 361, in result
+    raise self._raised
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 788, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1409, in run_flow_sync
+    engine.call_flow_fn()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 808, in call_flow_fn
+    result = call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 98, in release_flow
+    raise ValueError('Prepared input differs from the evaluated golden set; evaluate again')
+ValueError: Prepared input differs from the evaluated golden set; evaluate again
+12:55:43.286 | WARNING | EventsWorker - Still processing items: 1 items remaining...
+12:55:43.297 | INFO    | prefect - Stopping temporary server on http://127.0.0.1:8546
+
+Exit code: 1

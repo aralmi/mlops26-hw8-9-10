@@ -1,0 +1,85 @@
+$ make break-demo
+.venv/bin/python scripts/break_demo.py
+test_changed_bytes_at_same_path_invalidate_cache (test_release.ReleaseContractTests.test_changed_bytes_at_same_path_invalidate_cache) ... FAIL
+test_complete_bound_report_allowed (test_release.ReleaseContractTests.test_complete_bound_report_allowed) ... ok
+test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) ... 
+  test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) (key='tokenizer_revision') ... FAIL
+  test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) (key='template_sha256') ... FAIL
+  test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) (key='max_length') ... FAIL
+  test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) (key='code_revision') ... FAIL
+test_failed_atomic_replace_preserves_previous_bytes (test_release.ReleaseContractTests.test_failed_atomic_replace_preserves_previous_bytes) ... ok
+test_incomplete_false_and_truthy_string_rejected (test_release.ReleaseContractTests.test_incomplete_false_and_truthy_string_rejected) ... ok
+test_invalid_digest_and_schema_rejected (test_release.ReleaseContractTests.test_invalid_digest_and_schema_rejected) ... ok
+test_invalid_metric_rejected (test_release.ReleaseContractTests.test_invalid_metric_rejected) ... ok
+test_key_ignores_path_and_mapping_order (test_release.ReleaseContractTests.test_key_ignores_path_and_mapping_order) ... FAIL
+test_missing_fields_rejected (test_release.ReleaseContractTests.test_missing_fields_rejected) ... ok
+test_publish_and_repeat (test_release.ReleaseContractTests.test_publish_and_repeat) ... ok
+test_rejection_preserves_previous_bytes (test_release.ReleaseContractTests.test_rejection_preserves_previous_bytes) ... ok
+test_report_binding_mismatch_rejected (test_release.ReleaseContractTests.test_report_binding_mismatch_rejected) ... ok
+test_runtime_change_with_stale_hash_rejected (test_release.ReleaseContractTests.test_runtime_change_with_stale_hash_rejected) ... ok
+
+======================================================================
+FAIL: test_changed_bytes_at_same_path_invalidate_cache (test_release.ReleaseContractTests.test_changed_bytes_at_same_path_invalidate_cache)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/t3/4qj_4k256mxg4l2py__407l00000gn/T/hw8910-mutant-3vp5i4j0/tests/test_release.py", line 42, in test_changed_bytes_at_same_path_invalidate_cache
+    self.assertNotEqual(old,release.cache_key(self.data,self.config))
+AssertionError: '73c5e0d4257069bc656f3aeca1f440ce040160df48d186943d00d702738d8c0d' == '73c5e0d4257069bc656f3aeca1f440ce040160df48d186943d00d702738d8c0d'
+
+======================================================================
+FAIL: test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) (key='tokenizer_revision')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/t3/4qj_4k256mxg4l2py__407l00000gn/T/hw8910-mutant-3vp5i4j0/tests/test_release.py", line 48, in test_every_preparation_setting_invalidates_cache
+    config={**self.config,key:value};self.assertNotEqual(old,release.cache_key(self.data,config))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'fc605b3b2fc556efd70ae0b650be216cdec246e9c6b037e4587ddf2410009649' == 'fc605b3b2fc556efd70ae0b650be216cdec246e9c6b037e4587ddf2410009649'
+
+======================================================================
+FAIL: test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) (key='template_sha256')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/t3/4qj_4k256mxg4l2py__407l00000gn/T/hw8910-mutant-3vp5i4j0/tests/test_release.py", line 48, in test_every_preparation_setting_invalidates_cache
+    config={**self.config,key:value};self.assertNotEqual(old,release.cache_key(self.data,config))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'fc605b3b2fc556efd70ae0b650be216cdec246e9c6b037e4587ddf2410009649' == 'fc605b3b2fc556efd70ae0b650be216cdec246e9c6b037e4587ddf2410009649'
+
+======================================================================
+FAIL: test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) (key='max_length')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/t3/4qj_4k256mxg4l2py__407l00000gn/T/hw8910-mutant-3vp5i4j0/tests/test_release.py", line 48, in test_every_preparation_setting_invalidates_cache
+    config={**self.config,key:value};self.assertNotEqual(old,release.cache_key(self.data,config))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'fc605b3b2fc556efd70ae0b650be216cdec246e9c6b037e4587ddf2410009649' == 'fc605b3b2fc556efd70ae0b650be216cdec246e9c6b037e4587ddf2410009649'
+
+======================================================================
+FAIL: test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) (key='code_revision')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/t3/4qj_4k256mxg4l2py__407l00000gn/T/hw8910-mutant-3vp5i4j0/tests/test_release.py", line 48, in test_every_preparation_setting_invalidates_cache
+    config={**self.config,key:value};self.assertNotEqual(old,release.cache_key(self.data,config))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'fc605b3b2fc556efd70ae0b650be216cdec246e9c6b037e4587ddf2410009649' == 'fc605b3b2fc556efd70ae0b650be216cdec246e9c6b037e4587ddf2410009649'
+
+======================================================================
+FAIL: test_key_ignores_path_and_mapping_order (test_release.ReleaseContractTests.test_key_ignores_path_and_mapping_order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/t3/4qj_4k256mxg4l2py__407l00000gn/T/hw8910-mutant-3vp5i4j0/tests/test_release.py", line 38, in test_key_ignores_path_and_mapping_order
+    self.assertEqual(key,release.cache_key(other,dict(reversed(list(self.config.items())))))
+AssertionError: '91d9c03a8499945ea0248591a32ff13f3be95bd689f970e9fd9cb659bd942c7d' != '9e880212d030f110f141ddd4fa7f5e3bb4602384d6902f4e3e19a05c2c429ee8'
+- 91d9c03a8499945ea0248591a32ff13f3be95bd689f970e9fd9cb659bd942c7d
++ 9e880212d030f110f141ddd4fa7f5e3bb4602384d6902f4e3e19a05c2c429ee8
+
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.011s
+
+FAILED (failures=6)
+
+Exit code: 1
+
+The failing copy was removed. Working release.py was never changed.
+
+Exit code: 0

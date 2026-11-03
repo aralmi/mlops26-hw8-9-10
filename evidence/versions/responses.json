@@ -1,0 +1,75 @@
+{
+  "synthetic": true,
+  "observations": [
+    {
+      "stage": "loaded-A",
+      "status": 200,
+      "body": {
+        "answer": "STUB ONLY: fixture-A",
+        "output_tokens": 1,
+        "model_id": "fixture-A",
+        "runtime_sha256": "bc7bd5a4806e2e0e3b8569666b251d6c59a8d8e01e37fc37bf95b534023ca547",
+        "request_id": "9d6d9152-2712-4b72-914e-441495231f6b",
+        "generation_seconds": 0.012507624982390553,
+        "queue_seconds": 6.95799826644361e-06,
+        "total_seconds": 0.012514582980656996
+      }
+    },
+    {
+      "stage": "published-B-memory-still-A",
+      "status": 200,
+      "body": {
+        "answer": "STUB ONLY: fixture-A",
+        "output_tokens": 1,
+        "model_id": "fixture-A",
+        "runtime_sha256": "bc7bd5a4806e2e0e3b8569666b251d6c59a8d8e01e37fc37bf95b534023ca547",
+        "request_id": "ac4a68dd-383a-4251-b087-d49c7797915a",
+        "generation_seconds": 0.012527374987257645,
+        "queue_seconds": 6.708025466650724e-06,
+        "total_seconds": 0.012534083012724295
+      }
+    },
+    {
+      "stage": "restarted-on-B",
+      "status": 200,
+      "body": {
+        "answer": "STUB ONLY: fixture-B",
+        "output_tokens": 1,
+        "model_id": "fixture-B",
+        "runtime_sha256": "bc7bd5a4806e2e0e3b8569666b251d6c59a8d8e01e37fc37bf95b534023ca547",
+        "request_id": "59baff67-ec22-4be5-8fa6-9b5deb568381",
+        "generation_seconds": 0.012524499994469807,
+        "queue_seconds": 5.04200579598546e-06,
+        "total_seconds": 0.012529542000265792
+      }
+    },
+    {
+      "stage": "rollback-pointer-A-memory-still-B",
+      "status": 200,
+      "body": {
+        "answer": "STUB ONLY: fixture-B",
+        "output_tokens": 1,
+        "model_id": "fixture-B",
+        "runtime_sha256": "bc7bd5a4806e2e0e3b8569666b251d6c59a8d8e01e37fc37bf95b534023ca547",
+        "request_id": "8c4bfbe2-c64e-4771-8b1c-b972af342e04",
+        "generation_seconds": 0.012526749982498586,
+        "queue_seconds": 6.707996362820268e-06,
+        "total_seconds": 0.012533457978861406
+      }
+    },
+    {
+      "stage": "restarted-on-A",
+      "status": 200,
+      "body": {
+        "answer": "STUB ONLY: fixture-A",
+        "output_tokens": 1,
+        "model_id": "fixture-A",
+        "runtime_sha256": "bc7bd5a4806e2e0e3b8569666b251d6c59a8d8e01e37fc37bf95b534023ca547",
+        "request_id": "fc416794-0f33-4ac8-acac-1fcb0e0a762c",
+        "generation_seconds": 0.012526167003670707,
+        "queue_seconds": 5.790992872789502e-06,
+        "total_seconds": 0.012531957996543497
+      }
+    }
+  ]
+}

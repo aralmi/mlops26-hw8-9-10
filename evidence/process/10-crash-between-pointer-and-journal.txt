@@ -1,0 +1,146 @@
+PREPARED 1a3668c6f736aa37d263aebf121141add4d8514a1a553f1ce930a6327e648d20
+PREPARATION_EXECUTED 1a3668c6f736aa37d263aebf121141add4d8514a1a553f1ce930a6327e648d20
+12:51:37.332 | INFO    | prefect - Starting temporary server on http://127.0.0.1:8850
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+12:51:40.160 | WARNING | prefect.server - Unable to write to memo_store.toml at /Users/arsenij/.prefect/memo_store.toml after block auto-registration: FileNotFoundError(2, 'No such file or directory').
+ Subsequent server start ups will perform block auto-registration, which may result in slower server startup.
+12:51:40.254 | INFO    | Flow run 'classic-ammonite' - Beginning flow run 'classic-ammonite' for flow 'hw8910-release'
+12:51:40.290 | INFO    | Task run 'prepare-input-03e' - Finished in state Completed()
+12:51:40.315 | INFO    | Task run 'obtain-existing-artifact-c72' - Finished in state Completed()
+12:51:40.335 | INFO    | Task run 'evaluate-admission-e6a' - Finished in state Completed()
+12:51:40.354 | ERROR   | Task run 'publish-accepted-pointer-803' - Task run failed with exception: RuntimeError('Injected failure between pointer and journal')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 872, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 1514, in run_task_sync
+    engine.call_task_fn(txn)
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 889, in call_task_fn
+    result = call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 73, in publish_task
+    return journal.commit(root, manifest, report, fail_after_pointer=fail_after_pointer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/journal.py", line 83, in commit
+    raise RuntimeError('Injected failure between pointer and journal')
+RuntimeError: Injected failure between pointer and journal
+12:51:40.358 | ERROR   | Task run 'publish-accepted-pointer-803' - Finished in state Failed('Task run encountered an exception RuntimeError: Injected failure between pointer and journal')
+12:51:40.358 | ERROR   | Flow run 'classic-ammonite' - Encountered exception during execution: RuntimeError('Injected failure between pointer and journal')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 788, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1409, in run_flow_sync
+    engine.call_flow_fn()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 808, in call_flow_fn
+    result = call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 107, in release_flow
+    return publish_task(str(root), artifact, admission, fail_after_pointer, synthetic_report)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/tasks.py", line 1138, in __call__
+    return run_task(
+           ^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 1741, in run_task
+    return run_task_sync(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 1516, in run_task_sync
+    return engine.state if return_type == "state" else engine.result()
+                                                       ^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 493, in result
+    raise self._raised
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 872, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 1514, in run_task_sync
+    engine.call_task_fn(txn)
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 889, in call_task_fn
+    result = call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 73, in publish_task
+    return journal.commit(root, manifest, report, fail_after_pointer=fail_after_pointer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/journal.py", line 83, in commit
+    raise RuntimeError('Injected failure between pointer and journal')
+RuntimeError: Injected failure between pointer and journal
+12:51:40.377 | INFO    | Flow run 'classic-ammonite' - Finished in state Failed('Flow run encountered an exception: RuntimeError: Injected failure between pointer and journal')
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow_lab.py", line 28, in <module>
+    main()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow_lab.py", line 23, in main
+    release_flow(root, root/'input.txt', root/'manifest-B.json', root/'config.json',
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flows.py", line 1708, in __call__
+    return run_flow(
+           ^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1566, in run_flow
+    ret_val = run_flow_sync(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1411, in run_flow_sync
+    return engine.state if return_type == "state" else engine.result()
+                                                       ^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 361, in result
+    raise self._raised
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 788, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 1409, in run_flow_sync
+    engine.call_flow_fn()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/flow_engine.py", line 808, in call_flow_fn
+    result = call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 107, in release_flow
+    return publish_task(str(root), artifact, admission, fail_after_pointer, synthetic_report)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/tasks.py", line 1138, in __call__
+    return run_task(
+           ^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 1741, in run_task
+    return run_task_sync(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 1516, in run_task_sync
+    return engine.state if return_type == "state" else engine.result()
+                                                       ^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 493, in result
+    raise self._raised
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 872, in run_context
+    yield self
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 1514, in run_task_sync
+    engine.call_task_fn(txn)
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/task_engine.py", line 889, in call_task_fn
+    result = call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/utilities/callables.py", line 210, in call_with_parameters
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/flow.py", line 73, in publish_task
+    return journal.commit(root, manifest, report, fail_after_pointer=fail_after_pointer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/journal.py", line 83, in commit
+    raise RuntimeError('Injected failure between pointer and journal')
+RuntimeError: Injected failure between pointer and journal
+12:51:40.393 | INFO    | prefect - Stopping temporary server on http://127.0.0.1:8850
+12:51:40.572 | ERROR   | sqlalchemy.pool.impl.AsyncAdaptedQueuePool - Exception terminating connection <AdaptedConnection <aiosqlite.core.Connection object at 0x10a3c07d0>>
+Traceback (most recent call last):
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 370, in _close_connection
+    self._dialect.do_terminate(connection)
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py", line 372, in do_terminate
+    dbapi_connection.terminate()
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/sqlalchemy/connectors/asyncio.py", line 440, in terminate
+    await_(asyncio.shield(self._terminate_graceful_close()))
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/sqlalchemy/util/concurrency.py", line 167, in await_
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/sqlalchemy/util/concurrency.py", line 205, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError: Cancelled via cancel scope 10a80f070 by <Task cancelling name='Task-13' coro=<Consumer.run() running at /Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/lib/python3.12/site-packages/prefect/server/utilities/messaging/memory.py:351> cb=[Task.task_wakeup(), Task.task_wakeup()]>
+
+Exit code: 1

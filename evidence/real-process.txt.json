@@ -1,0 +1,9 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/real_process.py"
+  ],
+  "exit_code": 0,
+  "started_unix": 1793699709.591716,
+  "elapsed_seconds": 41.5730459690094
+}

@@ -1,0 +1,90 @@
+$ make check
+.venv/bin/python -m unittest discover -s tests -v
+test_changed_bytes_at_same_path_invalidate_cache (test_release.ReleaseContractTests.test_changed_bytes_at_same_path_invalidate_cache) ... ok
+test_complete_bound_report_allowed (test_release.ReleaseContractTests.test_complete_bound_report_allowed) ... ok
+test_every_preparation_setting_invalidates_cache (test_release.ReleaseContractTests.test_every_preparation_setting_invalidates_cache) ... ok
+test_failed_atomic_replace_preserves_previous_bytes (test_release.ReleaseContractTests.test_failed_atomic_replace_preserves_previous_bytes) ... ok
+test_incomplete_false_and_truthy_string_rejected (test_release.ReleaseContractTests.test_incomplete_false_and_truthy_string_rejected) ... ok
+test_invalid_digest_and_schema_rejected (test_release.ReleaseContractTests.test_invalid_digest_and_schema_rejected) ... ok
+test_invalid_metric_rejected (test_release.ReleaseContractTests.test_invalid_metric_rejected) ... ok
+test_key_ignores_path_and_mapping_order (test_release.ReleaseContractTests.test_key_ignores_path_and_mapping_order) ... ok
+test_missing_fields_rejected (test_release.ReleaseContractTests.test_missing_fields_rejected) ... ok
+test_publish_and_repeat (test_release.ReleaseContractTests.test_publish_and_repeat) ... ok
+test_rejection_preserves_previous_bytes (test_release.ReleaseContractTests.test_rejection_preserves_previous_bytes) ... ok
+test_report_binding_mismatch_rejected (test_release.ReleaseContractTests.test_report_binding_mismatch_rejected) ... ok
+test_runtime_change_with_stale_hash_rejected (test_release.ReleaseContractTests.test_runtime_change_with_stale_hash_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.009s
+
+OK
+.venv/bin/python -m unittest discover -s verification -v -b
+test_crash_between_pointer_and_journal_recovers_once (test_safety.AdditionalSafetyTests.test_crash_between_pointer_and_journal_recovers_once) ... ok
+test_managed_rollback_uses_previously_accepted_manifest (test_safety.AdditionalSafetyTests.test_managed_rollback_uses_previously_accepted_manifest) ... ok
+test_ready_failure_if_artifact_is_missing (test_safety.AdditionalSafetyTests.test_ready_failure_if_artifact_is_missing) ... ok
+test_real_file_mutation_rejects_before_publication (test_safety.AdditionalSafetyTests.test_real_file_mutation_rejects_before_publication) ... ok
+test_refused_release_leaves_history_and_pointer_unchanged (test_safety.AdditionalSafetyTests.test_refused_release_leaves_history_and_pointer_unchanged) ... ok
+test_release_identity_includes_runtime_and_decision (test_safety.AdditionalSafetyTests.test_release_identity_includes_runtime_and_decision) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.030s
+
+OK
+HW8910_PROJECT=/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken HW8910_RUNNER=lab.py HW8910_SERVICE=service.py .venv/bin/python scripts/run_integrations.py --json evidence/checks/http.json
+test_cache_survives_restart_but_changed_input_invalidates (incident_regressions.IncidentIntegrationTests.test_cache_survives_restart_but_changed_input_invalidates) ... ok
+test_http_invalid_requests_never_call_backend (incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend) ... ok
+test_http_loaded_version_changes_only_after_restart_and_rollback (incident_regressions.IncidentIntegrationTests.test_http_loaded_version_changes_only_after_restart_and_rollback) ... ok
+test_http_ready_waits_for_warmup (incident_regressions.IncidentIntegrationTests.test_http_ready_waits_for_warmup) ... ok
+test_incomplete_and_foreign_reports_cannot_replace_pointer (incident_regressions.IncidentIntegrationTests.test_incomplete_and_foreign_reports_cannot_replace_pointer) ... ok
+test_reject_and_atomic_replace_error_preserve_bytes (incident_regressions.IncidentIntegrationTests.test_reject_and_atomic_replace_error_preserve_bytes) ... ok
+test_repeat_in_separate_processes_has_one_publication (incident_regressions.IncidentIntegrationTests.test_repeat_in_separate_processes_has_one_publication) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 3.158s
+
+OK
+HW8910_PROJECT=/Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken HW8910_RUNNER=flow_lab.py HW8910_SERVICE=api.py .venv/bin/python scripts/run_integrations.py --json evidence/checks/prefect-fastapi.json
+test_cache_survives_restart_but_changed_input_invalidates (incident_regressions.IncidentIntegrationTests.test_cache_survives_restart_but_changed_input_invalidates) ... ok
+test_http_invalid_requests_never_call_backend (incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend) ... ok
+test_http_loaded_version_changes_only_after_restart_and_rollback (incident_regressions.IncidentIntegrationTests.test_http_loaded_version_changes_only_after_restart_and_rollback) ... ok
+test_http_ready_waits_for_warmup (incident_regressions.IncidentIntegrationTests.test_http_ready_waits_for_warmup) ... ok
+test_incomplete_and_foreign_reports_cannot_replace_pointer (incident_regressions.IncidentIntegrationTests.test_incomplete_and_foreign_reports_cannot_replace_pointer) ... ok
+test_reject_and_atomic_replace_error_preserve_bytes (incident_regressions.IncidentIntegrationTests.test_reject_and_atomic_replace_error_preserve_bytes) ... ok
+test_repeat_in_separate_processes_has_one_publication (incident_regressions.IncidentIntegrationTests.test_repeat_in_separate_processes_has_one_publication) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 44.003s
+
+OK
+cd previous/hw67 && /Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v -b
+test_behavioral_failure_rejected (test_eval.GateContract.test_behavioral_failure_rejected) ... ok
+test_critical_regression_despite_average_growth (test_eval.GateContract.test_critical_regression_despite_average_growth) ... ok
+test_equal_passes (test_eval.GateContract.test_equal_passes) ... ok
+test_improvement_passes (test_eval.GateContract.test_improvement_passes) ... ok
+test_missing_critical_slice_rejected (test_eval.GateContract.test_missing_critical_slice_rejected) ... ok
+test_missing_nan_empty_error_and_incompatible_rejected (test_eval.GateContract.test_missing_nan_empty_error_and_incompatible_rejected) ... ok
+test_regression_rejected (test_eval.GateContract.test_regression_rejected) ... ok
+test_clean_data (test_eval.LeakageContract.test_clean_data) ... ok
+test_duplicate_golden_questions_rejected (test_eval.LeakageContract.test_duplicate_golden_questions_rejected) ... ok
+test_exact_overlap (test_eval.LeakageContract.test_exact_overlap) ... ok
+test_group_overlap (test_eval.LeakageContract.test_group_overlap) ... ok
+test_too_small_or_missing_behavior (test_eval.LeakageContract.test_too_small_or_missing_behavior) ... ok
+test_no_registry_mutation_when_gate_rejects (test_eval.PromotionContract.test_no_registry_mutation_when_gate_rejects) ... ok
+test_accuracy_uses_all_questions (test_eval.ScoreContract.test_accuracy_uses_all_questions) ... ok
+test_missing_duplicate_empty_rejected (test_eval.ScoreContract.test_missing_duplicate_empty_rejected) ... ok
+test_reordered_outputs_are_matched_by_id (test_eval.ScoreContract.test_reordered_outputs_are_matched_by_id) ... ok
+test_slice_counts_and_per_item (test_eval.ScoreContract.test_slice_counts_and_per_item) ... ok
+test_strict_json_and_label (test_eval.ScoreContract.test_strict_json_and_label) ... ok
+test_wrong_label_is_valid_but_incorrect (test_eval.ScoreContract.test_wrong_label_is_valid_but_incorrect) ... ok
+test_baseline_init_refuses_overwrite (test_pipeline.PipelineContract.test_baseline_init_refuses_overwrite) ... ok
+test_negative_check_does_not_mutate_model_or_alias (test_pipeline.PipelineContract.test_negative_check_does_not_mutate_model_or_alias) ... ok
+test_pass_release_and_explicit_baseline_update (test_pipeline.PipelineContract.test_pass_release_and_explicit_baseline_update) ... ok
+test_protocol_or_raw_changes_rejected (test_pipeline.PipelineContract.test_protocol_or_raw_changes_rejected) ... ok
+test_refused_candidate_keeps_alias (test_pipeline.PipelineContract.test_refused_candidate_keeps_alias) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.041s
+
+OK
+
+Exit code: 0

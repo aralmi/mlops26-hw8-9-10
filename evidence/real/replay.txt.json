@@ -1,0 +1,9 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/replay_baseline.py"
+  ],
+  "exit_code": 0,
+  "started_unix": 1793699705.649394,
+  "elapsed_seconds": 41.98466396331787
+}

@@ -1,0 +1,15 @@
+$ /Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/.venv/bin/python scripts/run_integrations.py --json /Users/arsenij/Desktop/mlops/mlops26-hw8-9-10/hw8910-broken/evidence/regressions/target.json
+test_cache_survives_restart_but_changed_input_invalidates (incident_regressions.IncidentIntegrationTests.test_cache_survives_restart_but_changed_input_invalidates) ... ok
+test_http_invalid_requests_never_call_backend (incident_regressions.IncidentIntegrationTests.test_http_invalid_requests_never_call_backend) ... ok
+test_http_loaded_version_changes_only_after_restart_and_rollback (incident_regressions.IncidentIntegrationTests.test_http_loaded_version_changes_only_after_restart_and_rollback) ... ok
+test_http_ready_waits_for_warmup (incident_regressions.IncidentIntegrationTests.test_http_ready_waits_for_warmup) ... ok
+test_incomplete_and_foreign_reports_cannot_replace_pointer (incident_regressions.IncidentIntegrationTests.test_incomplete_and_foreign_reports_cannot_replace_pointer) ... ok
+test_reject_and_atomic_replace_error_preserve_bytes (incident_regressions.IncidentIntegrationTests.test_reject_and_atomic_replace_error_preserve_bytes) ... ok
+test_repeat_in_separate_processes_has_one_publication (incident_regressions.IncidentIntegrationTests.test_repeat_in_separate_processes_has_one_publication) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 43.950s
+
+OK
+
+Exit code: 0

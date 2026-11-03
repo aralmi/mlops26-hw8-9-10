@@ -1,0 +1,36 @@
+Создан синтетический стенд: /var/folders/t3/4qj_4k256mxg4l2py__407l00000gn/T/hw8910-versions-kessh_h8/lab
+INFO:     Started server process [42948]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:54914 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54918 - "GET /ready HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:54919 - "GET /ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54920 - "POST /generate HTTP/1.1" 200 OK
+PREPARED 88bbd559a04a7a432693a1c611ef2704bb711ac17dd5e22203ee9e5020f59fd4
+PUBLISHED fixture-B
+INFO:     127.0.0.1:54921 - "POST /generate HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42948]
+INFO:     Started server process [42958]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:54922 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54927 - "GET /ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54928 - "POST /generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54929 - "POST /generate HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42958]
+INFO:     Started server process [42960]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:54930 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54937 - "GET /ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54938 - "POST /generate HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42960]

@@ -1,0 +1,21 @@
+{
+  "health": 200,
+  "readiness_observed": [
+    200,
+    503
+  ],
+  "answer": {
+    "answer": "{\"answer\": \"A\"}",
+    "output_tokens": 7,
+    "model_id": "base:Qwen/Qwen3-0.6B@c1899de289a04d12100db370d81485cdf75e47ca",
+    "runtime_sha256": "d11aea556984da9354c2deb6a01c05a12b71de7fdd512f1a5fd3cf8a421a32da",
+    "request_id": "7a824d97-fe63-4c43-851a-78e4a6b87080",
+    "generation_seconds": 0.713863915996626,
+    "queue_seconds": 8.292001439258456e-06,
+    "total_seconds": 0.7138722079980653
+  },
+  "invalid_status": 422,
+  "matches_saved_eval": true
+}
+
+Exit code: 0

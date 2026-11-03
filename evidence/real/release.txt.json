@@ -1,0 +1,9 @@
+{
+  "command": [
+    "make",
+    "release"
+  ],
+  "exit_code": 2,
+  "started_unix": 1793699558.798283,
+  "elapsed_seconds": 5.503051996231079
+}

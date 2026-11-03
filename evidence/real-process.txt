@@ -1,0 +1,9 @@
+$ .venv/bin/python scripts/real_process.py
+01-fail-after-prepare PREPARED exit=1
+02-recovered-rejected CACHE_HIT exit=1
+03-repeat-rejected CACHE_HIT exit=1
+04-changed-input PREPARED exit=1
+05-changed-input-closed CACHE_HIT exit=1
+06-restored-rejected CACHE_HIT exit=1
+
+Exit code: 0
