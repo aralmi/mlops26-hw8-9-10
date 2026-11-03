@@ -88,14 +88,15 @@ Inventory файлов — `config/base-files.json`. В Git весов нет.
 При работающем старом MLflow: `make fetch-candidate`, затем `make prepare-candidate`.
 Это получение готового результата, обучения нет.
 
-Для передачи преподавателю подготовлен отдельный архив
-`.runtime/distribution/pandas-candidate.tar.gz` (22 462 355 байт).
+Архив адаптера опубликован в [релизе v1](https://github.com/aralmi/mlops26-hw8-9-10/releases/tag/v1):
+[скачать pandas-candidate.tar.gz](https://github.com/aralmi/mlops26-hw8-9-10/releases/download/v1/pandas-candidate.tar.gz)
+(22 462 355 байт).
 Его SHA-256 и хеши всех файлов — в `config/candidate-artifact.json`.
-Архив передаётся отдельно от Git либо публикуется как Release asset вместе с репозиторием.
-Восстановление из полученного архива:
+Загрузка и восстановление:
 
 ```bash
-.venv/bin/python scripts/restore_candidate.py /path/to/pandas-candidate.tar.gz
+curl -fL https://github.com/aralmi/mlops26-hw8-9-10/releases/download/v1/pandas-candidate.tar.gz -o /tmp/pandas-candidate.tar.gz
+.venv/bin/python scripts/restore_candidate.py /tmp/pandas-candidate.tar.gz
 make prepare-candidate CANDIDATE_DIR=.runtime/artifacts/restored-candidate
 ```
 

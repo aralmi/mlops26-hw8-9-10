@@ -256,8 +256,10 @@ Transformers backend не измеряет continuous batching и планиро
 ## 10. Доступ к артефактам и воспроизведение
 
 База публична на Hugging Face по точной revision; команды и профили установки —
-в [README](../README.md). Архив адаптера передаётся отдельно от Git:
-`pandas-candidate.tar.gz`, 22 462 355 байт, SHA-256
+в [README](../README.md). Архив адаптера доступен в
+[GitHub Releases v1](https://github.com/aralmi/mlops26-hw8-9-10/releases/tag/v1):
+[pandas-candidate.tar.gz](https://github.com/aralmi/mlops26-hw8-9-10/releases/download/v1/pandas-candidate.tar.gz),
+22 462 355 байт, SHA-256
 `505193197a17f25b55a65a7d5454df698926253d8c4a0149e4546fea77efdba0`.
 Inventory — [candidate-artifact.json](../config/candidate-artifact.json).
 [Проверено восстановление](../evidence/real/artifact-restore.json): model/runtime-хеши
