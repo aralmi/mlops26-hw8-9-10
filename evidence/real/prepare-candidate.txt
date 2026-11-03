@@ -1,4 +1,0 @@
-$ .venv/bin/python materialize.py --candidate-root .runtime/artifacts/candidate
-Local descriptors written; no training, evaluation or service startup performed.
-
-Exit code: 0

@@ -1,4 +1,0 @@
-$ .venv/bin/python materialize.py
-Local descriptors written; no training, evaluation or service startup performed.
-
-Exit code: 0

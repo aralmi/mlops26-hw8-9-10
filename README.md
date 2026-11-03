@@ -37,7 +37,7 @@ make break-demo         # намеренная поломка в отдельн�
 
 ## Настоящий API
 
-На этом Mac окружение и артефакты уже подготовлены. В первом терминале:
+После подготовки артефактов запустите API:
 
 ```bash
 make serve
@@ -113,7 +113,7 @@ make prepare-candidate CANDIDATE_DIR=.runtime/artifacts/restored-candidate
 | `api.py`, `api_core.py`, `backends.py` | FastAPI, валидация, очередь, готовность, настоящая модель и stub |
 | `lineage.py`, `materialize.py` | Связь training run → полный eval → решение → загруженные файлы |
 | `tests/`, `integration/`, `verification/` | Исходные, собственные интеграционные и дополнительные тесты |
-| `previous/hw67/`, `previous/source.json` | Прежняя сдача и SHA-256 её неизменённых файлов |
+| `previous/hw67/`, `previous/source.json` | Код оценки, исходные отчёты и тесты ДЗ 6–7 с SHA-256 |
 | `evidence/` | Настоящие журналы, raw-ответы, замер, manifest и SHA-256 |
 | `docs/report.md`, `defects.csv` | Единый отчёт и семь независимых причин |
 

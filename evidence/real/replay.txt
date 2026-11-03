@@ -1,4 +1,0 @@
-$ .venv/bin/python scripts/replay_baseline.py
-Matched 53/53 saved baseline answers
-
-Exit code: 0

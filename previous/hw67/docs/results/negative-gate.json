@@ -1,5 +1,0 @@
-{
-  "rejected": true,
-  "reason": "Общая accuracy ухудшилась; Общая format_rate ухудшилась; Accuracy критического среза indexing ухудшилась; Accuracy критического среза missing_data ухудшилась; Не все обязательные behavioral-кейсы пройдены",
-  "note": "Испорчены сохранённые ответы; реальные веса и alias не менялись"
-}

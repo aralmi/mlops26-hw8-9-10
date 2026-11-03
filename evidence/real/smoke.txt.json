@@ -1,9 +1,0 @@
-{
-  "command": [
-    ".venv/bin/python",
-    "scripts/real_smoke.py"
-  ],
-  "exit_code": 0,
-  "started_unix": 1793699461.2735841,
-  "elapsed_seconds": 39.71654987335205
-}

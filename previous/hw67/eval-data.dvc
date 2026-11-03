@@ -1,6 +1,0 @@
-outs:
-- md5: c38cdd48d62be538d60fe2f257865fbd.dir
-  size: 2594300
-  nfiles: 5
-  hash: md5
-  path: data/eval

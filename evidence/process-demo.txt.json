@@ -1,9 +1,0 @@
-{
-  "command": [
-    "make",
-    "process-demo"
-  ],
-  "exit_code": 0,
-  "started_unix": 1793699464.626953,
-  "elapsed_seconds": 45.55953907966614
-}
