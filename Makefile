@@ -2,6 +2,8 @@ PYTHON ?= .venv/bin/python
 PORT ?= 8091
 API_URL ?= http://127.0.0.1:$(PORT)
 CANDIDATE_DIR ?= .runtime/artifacts/candidate
+RUN_ID := $(shell date -u +%Y%m%dT%H%M%SZ)
+OUTDIR ?= .runtime/repeats/$(RUN_ID)
 UV_CACHE_DIR ?= $(CURDIR)/.uv-cache
 export UV_CACHE_DIR
 export PREFECT_HOME := $(CURDIR)/.prefect
@@ -47,10 +49,10 @@ break-demo:
 	$(PYTHON) scripts/break_demo.py
 
 process-demo:
-	$(PYTHON) scripts/process_demo.py
+	$(PYTHON) scripts/process_demo.py --output $(OUTDIR)/process
 
 versions-demo:
-	$(PYTHON) scripts/versions_demo.py
+	$(PYTHON) scripts/versions_demo.py --output $(OUTDIR)/versions
 
 prepare-real:
 	$(PYTHON) materialize.py
@@ -68,13 +70,13 @@ serve:
 	$(PYTHON) api.py --workspace .runtime --backend transformers --port $(PORT)
 
 smoke:
-	$(PYTHON) scripts/real_smoke.py
+	$(PYTHON) scripts/real_smoke.py --output $(OUTDIR)/real-smoke
 
 replay:
-	$(PYTHON) scripts/replay_baseline.py --url $(API_URL)
+	$(PYTHON) scripts/replay_baseline.py --url $(API_URL) --output $(OUTDIR)/baseline-replay.jsonl
 
 benchmark:
-	$(PYTHON) scripts/benchmark.py --n 8 --url $(API_URL)
+	$(PYTHON) scripts/benchmark.py --n 8 --url $(API_URL) --output $(OUTDIR)/benchmark
 
 status:
 	$(PYTHON) scripts/verify_evidence.py
@@ -92,10 +94,10 @@ gate:
 	$(PYTHON) scripts/gate.py
 
 real-process:
-	$(PYTHON) scripts/real_process.py
+	$(PYTHON) scripts/real_process.py --workspace $(OUTDIR)/workspace --output $(OUTDIR)/real-process
 
 restart:
-	$(PYTHON) scripts/restart_real.py
+	$(PYTHON) scripts/restart_real.py --output $(OUTDIR)/restart
 
 export:
 	$(PYTHON) scripts/export_results.py

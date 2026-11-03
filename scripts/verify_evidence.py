@@ -11,6 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 import lineage
 import release
+from source_snapshot import snapshot
 
 
 def read(name):return json.loads((ROOT/name).read_text())
@@ -18,13 +19,16 @@ def read(name):return json.loads((ROOT/name).read_text())
 
 def main():
     index=read('evidence/manifest.json')
+    assert index['code_sha256']==snapshot(), 'Source file set changed'
     for name,expected in {**index['files'],**index['code_sha256']}.items():
         if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=expected:
             raise ValueError('Source/evidence changed: '+name)
     _,reports,_=lineage.evidence()
     full=(ROOT/'evidence/checks/full.txt').read_text()
     count=sum(map(int,re.findall(r'Ran (\d+) tests',full)))
-    assert count==57 and read('evidence/checks/full.txt.json')['exit_code']==0
+    check=read('evidence/checks/full.txt.json')
+    assert count==57 and check['exit_code']==0
+    assert check['source_sha256_before']==index['code_sha256']==check['source_sha256_after']
     assert len(re.findall(r'^OK$',full,re.M))==5 and 'FAILED (' not in full
     before=read('evidence/regressions/before.json')
     assert before['tests']==7 and len({r['test'] for r in before['failures']})==7 and not before['errors']

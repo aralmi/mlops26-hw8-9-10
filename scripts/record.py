@@ -5,6 +5,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from source_snapshot import snapshot
 
 
 def main():
@@ -17,6 +18,7 @@ def main():
         parser.error('Command required after log path')
     args.log.parent.mkdir(parents=True, exist_ok=True)
     started = time.time()
+    source_before = snapshot()
     with args.log.open('w') as stream:
         stream.write('$ ' + ' '.join(command) + '\n')
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
@@ -27,7 +29,8 @@ def main():
         result = process.wait()
         stream.write(f'\nExit code: {result}\n')
     args.log.with_suffix(args.log.suffix+'.json').write_text(json.dumps({
-        'command':command,'exit_code':result,'started_unix':started,'elapsed_seconds':time.time()-started},indent=2)+'\n')
+        'command':command,'exit_code':result,'started_unix':started,'elapsed_seconds':time.time()-started,
+        'source_sha256_before':source_before,'source_sha256_after':snapshot()},indent=2)+'\n')
     raise SystemExit(result)
 
 

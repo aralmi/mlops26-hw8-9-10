@@ -1,4 +1,5 @@
 """Real HTTP/process experiment A -> B -> A; both versions are explicit stubs."""
+import argparse
 import json
 import socket
 import subprocess
@@ -13,7 +14,9 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def main():
-    output=ROOT/'evidence/versions'
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,default=ROOT/'evidence/versions')
+    output=parser.parse_args().output
     if output.exists():raise SystemExit('Evidence exists; preserve it before repeating the experiment')
     output.mkdir(parents=True)
     observations=[]

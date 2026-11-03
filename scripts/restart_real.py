@@ -1,4 +1,5 @@
 """Load the same accepted real manifest in two consecutive fresh API processes."""
+import argparse
 import json
 import subprocess
 import sys
@@ -8,7 +9,9 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def main():
-    output=ROOT/'evidence/restart'
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,default=ROOT/'evidence/restart')
+    output=parser.parse_args().output
     if output.exists():raise SystemExit('Preserve the previous restart experiment before repeating')
     output.mkdir(parents=True)
     records=[]
